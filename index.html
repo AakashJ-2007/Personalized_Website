@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-  <link rel="icon" type="AK.png" href="images/favicon.png">
+
   <style>
     /* ==========================================================================
        01. SYSTEM TOKENS & DYNAMIC THEMES
@@ -157,6 +157,24 @@
       overflow-x: hidden;
       scroll-behavior: smooth;
     }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.22;
+      background:
+        linear-gradient(115deg, transparent 0 38%, rgba(0, 210, 255, 0.08) 46%, transparent 54%),
+        radial-gradient(circle at 12% 18%, rgba(112, 0, 255, 0.15), transparent 28%),
+        radial-gradient(circle at 88% 72%, rgba(0, 255, 170, 0.1), transparent 25%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 22px);
+      animation: background-drift 18s linear infinite alternate;
+    }
+    @keyframes background-drift {
+      from { transform: scale(1) translate3d(0, 0, 0); }
+      to { transform: scale(1.08) translate3d(-1.5%, 1%, 0); }
+    }
 
     ::selection {
       background: var(--accent-primary);
@@ -190,6 +208,40 @@
       color: inherit;
       text-decoration: none;
     }
+    :focus-visible {
+      outline: 2px solid var(--accent-highlight);
+      outline-offset: 3px;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .save-toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 1100;
+      padding: 11px 15px;
+      border: 1px solid var(--border-glow);
+      border-radius: 10px;
+      background: rgba(3, 8, 16, 0.92);
+      color: var(--accent-highlight);
+      font: 11px var(--font-mono);
+      letter-spacing: 0.6px;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.25s var(--ease-cinematic), transform 0.25s var(--ease-spring);
+    }
+    .save-toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .empty-state {
+      padding: 24px 12px;
+      border: 1px dashed var(--border-subtle);
+      border-radius: 12px;
+      color: var(--text-muted);
+      font: 12px var(--font-mono);
+      text-align: center;
+    }
 
     /* ==========================================================================
        03. INTERACTIVE CUSTOM CURSOR
@@ -198,33 +250,68 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 6px;
-      height: 6px;
-      background: var(--accent-primary);
+      width: 8px;
+      height: 8px;
+      background: #fff;
       border-radius: 50%;
       pointer-events: none;
       z-index: 10000;
       transform: translate(-50%, -50%);
-      transition: width 0.2s, height 0.2s, background-color 0.2s;
+      box-shadow: 0 0 10px var(--accent-highlight), 0 0 22px var(--accent-glow);
+      transition: width 0.2s var(--ease-spring), height 0.2s var(--ease-spring), background-color 0.2s;
     }
     #cursor-ring {
       position: fixed;
       top: 0;
       left: 0;
-      width: 32px;
-      height: 32px;
-      border: 1px solid var(--border-glow);
+      width: 28px;
+      height: 28px;
+      border: 1px dashed var(--accent-primary);
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -50%);
+      box-shadow: 0 0 16px var(--accent-glow), inset 0 0 8px rgba(0, 136, 255, 0.12);
+      animation: cursor-orbit 4s linear infinite;
       transition: transform 0.08s ease-out, width 0.25s var(--ease-spring), height 0.25s var(--ease-spring), border-color 0.25s;
+    }
+    #cursor-ring::before,
+    #cursor-ring::after {
+      content: '';
+      position: absolute;
+      background: var(--accent-highlight);
+      opacity: 0.9;
+    }
+    #cursor-ring::before {
+      width: 4px;
+      height: 4px;
+      left: 12px;
+      top: -3px;
+      border-radius: 50%;
+    }
+    #cursor-ring::after {
+      width: 4px;
+      height: 4px;
+      left: -3px;
+      top: 12px;
+      border-radius: 50%;
+    }
+    @keyframes cursor-orbit {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
     }
     body.cursor-hover #cursor-ring {
       width: 54px;
       height: 54px;
       border-color: var(--accent-highlight);
       background: rgba(0, 140, 255, 0.05);
+      transform: translate(-50%, -50%) scale(1.18);
+      animation-duration: 1.4s;
+    }
+    body.cursor-hover #cursor-dot {
+      width: 12px;
+      height: 12px;
+      background: var(--accent-highlight);
     }
 
     /* ==========================================================================
@@ -238,6 +325,21 @@
       pointer-events: none;
       z-index: 0;
       opacity: 0.85;
+    }
+    .ambient-logo-mark {
+      position: fixed;
+      right: 4vw;
+      bottom: 12vh;
+      width: min(230px, 24vw);
+      opacity: 0.055;
+      filter: saturate(1.4) drop-shadow(0 0 24px var(--accent-primary));
+      pointer-events: none;
+      z-index: 0;
+      animation: ambient-logo-float 9s ease-in-out infinite;
+    }
+    @keyframes ambient-logo-float {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-18px) rotate(2deg); }
     }
 
     /* ==========================================================================
@@ -720,6 +822,86 @@
       background: radial-gradient(circle at 50% 50%, rgba(14, 24, 46, 0.6) 0%, rgba(1, 2, 4, 0.95) 100%);
       border: 1px solid var(--border-subtle);
       overflow: hidden;
+      isolation: isolate;
+      perspective: 900px;
+      transform-style: preserve-3d;
+      transition: transform 0.18s ease-out, box-shadow 0.3s ease;
+      will-change: transform;
+    }
+    .nexus-canvas-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 240, 255, 0.1) 48%, transparent 51%);
+      background-size: 100% 220%;
+      animation: nexus-scanline 4.5s linear infinite;
+      mix-blend-mode: screen;
+    }
+    .nexus-canvas-box::after {
+      content: '';
+      position: absolute;
+      inset: 12% 24%;
+      border: 1px solid rgba(0, 240, 255, 0.12);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: nexus-orbit 8s linear infinite, nexus-orbit-flare 3s ease-in-out infinite;
+    }
+    @keyframes nexus-scanline {
+      from { background-position: 0 -120%; }
+      to { background-position: 0 120%; }
+    }
+    @keyframes nexus-orbit-flare {
+      0%, 100% { box-shadow: 0 0 0 rgba(0, 240, 255, 0); }
+      50% { box-shadow: 0 0 34px rgba(0, 240, 255, 0.16); }
+    }
+    .nexus-hover-panel {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      width: min(280px, 48%);
+      padding: 8px 0 8px 18px;
+      border-left: 2px solid var(--accent-primary);
+      background: linear-gradient(90deg, rgba(0, 136, 255, 0.12), transparent 80%);
+      transform-origin: right center;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-8px) translateZ(60px) rotateY(-12deg);
+      transition: opacity 0.25s var(--ease-cinematic), transform 0.25s var(--ease-spring);
+      text-shadow: 0 0 12px var(--accent-glow);
+    }
+    .nexus-hover-panel.visible {
+      opacity: 1;
+      transform: translateY(0) translateZ(60px) rotateY(0deg);
+    }
+    .nexus-hover-kicker {
+      color: var(--accent-highlight);
+      font: 10px var(--font-mono);
+      letter-spacing: 1.5px;
+    }
+    .nexus-hover-title {
+      margin: 5px 0;
+      color: #fff;
+      font: 700 16px var(--font-display);
+    }
+    .nexus-hover-copy {
+      color: var(--text-muted);
+      font-size: 11.5px;
+      line-height: 1.45;
+    }
+    .nexus-hover-signal {
+      width: 130px;
+      height: 2px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: var(--accent-gradient);
+      animation: signal-scan 1.2s linear infinite;
+    }
+    @keyframes signal-scan {
+      from { transform: translateX(-60%); opacity: 0.35; }
+      to { transform: translateX(60%); opacity: 1; }
     }
     #nexus-canvas {
       width: 100%;
@@ -957,6 +1139,19 @@
       background: rgba(255, 255, 255, 0.04);
       border-color: var(--border-glow);
     }
+    .timeline-entry-card {
+      position: relative;
+    }
+    .timeline-edit-grid {
+      display: grid;
+      grid-template-columns: 110px 1fr 120px auto;
+      gap: 8px;
+      align-items: center;
+    }
+    @media (max-width: 640px) {
+      .timeline-edit-grid { grid-template-columns: 1fr 1fr; }
+      .timeline-edit-grid .timeline-title-field { grid-column: 1 / -1; }
+    }
     .item-top-row {
       display: flex;
       justify-content: space-between;
@@ -982,6 +1177,52 @@
     /* ==========================================================================
        14. AK AI LAB & STREAMING CONSOLE
        ========================================================================== */
+    .ai-lab-stage {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.8fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+    .neural-globe-wrap {
+      position: relative;
+      min-height: 220px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(0, 255, 170, 0.2);
+      border-radius: 14px;
+      background: radial-gradient(circle, rgba(0, 255, 170, 0.12), rgba(2, 3, 6, 0.92) 68%);
+      box-shadow: inset 0 0 38px rgba(0, 255, 170, 0.08), 0 0 24px rgba(0, 255, 170, 0.08);
+    }
+    #neural-globe-canvas {
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      display: block;
+    }
+    .neural-globe-label {
+      position: absolute;
+      bottom: 12px;
+      left: 14px;
+      color: #a7f3d0;
+      font: 9px var(--font-mono);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(0, 255, 170, 0.8);
+    }
+    .neural-globe-pulse {
+      position: absolute;
+      width: 54%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(0, 255, 170, 0.25);
+      border-radius: 50%;
+      animation: globe-pulse 2.8s ease-out infinite;
+      pointer-events: none;
+    }
+    @keyframes globe-pulse {
+      0% { transform: scale(0.65); opacity: 0.8; }
+      100% { transform: scale(1.35); opacity: 0; }
+    }
     .ai-lab-terminal {
       background: #020306;
       border: 1px solid var(--border-subtle);
@@ -1009,6 +1250,10 @@
       from { opacity: 0; transform: translateX(-12px); }
       to { opacity: 1; transform: translateX(0); }
     }
+    @media (max-width: 720px) {
+      .ai-lab-stage { grid-template-columns: 1fr; }
+      .neural-globe-wrap { min-height: 190px; }
+    }
     .terminal-cursor {
       display: inline-block;
       width: 8px;
@@ -1028,6 +1273,93 @@
     .focus-hud-box.focus-engaged {
       background: radial-gradient(circle, rgba(0, 240, 255, 0.1), transparent 62%);
       animation: focus-breathe 2.2s ease-in-out infinite;
+    }
+    .worktable-wrap {
+      overflow-x: auto;
+    }
+    .worktable-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .worktable-caption {
+      color: var(--text-muted);
+      font: 11px var(--font-mono);
+      letter-spacing: 0.8px;
+    }
+    .worktable {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+      font-size: 12px;
+    }
+    .worktable th {
+      padding: 0 10px 4px;
+      color: var(--text-dim);
+      font: 10px var(--font-mono);
+      letter-spacing: 1px;
+      text-align: left;
+      text-transform: uppercase;
+    }
+    .worktable td {
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.025);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .worktable td:first-child { border-left: 1px solid var(--border-subtle); border-radius: 10px 0 0 10px; }
+    .worktable td:last-child { border-right: 1px solid var(--border-subtle); border-radius: 0 10px 10px 0; }
+    .worktable tr:hover td { background: rgba(0, 136, 255, 0.06); border-color: var(--border-glow); }
+    .worktable input, .worktable select {
+      width: 100%;
+      min-width: 0;
+      padding: 8px 9px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      color: var(--text-main);
+      background: rgba(0, 0, 0, 0.22);
+      font-size: 12px;
+    }
+    .worktable input:focus, .worktable select:focus { border-color: var(--accent-primary); }
+    .worktable-delete {
+      color: #ff6688;
+      cursor: pointer;
+      font: 16px var(--font-mono);
+    }
+    .money-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .money-stat {
+      padding: 16px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      background: rgba(0, 255, 170, 0.035);
+    }
+    .money-stat-value {
+      margin-top: 6px;
+      color: #a7f3d0;
+      font: 700 24px var(--font-display);
+    }
+    .net-worth-total {
+      padding: 20px;
+      border: 1px solid rgba(0, 255, 170, 0.28);
+      border-radius: 14px;
+      background: radial-gradient(circle at 80% 20%, rgba(0, 255, 170, 0.12), rgba(255, 255, 255, 0.02));
+    }
+    .net-worth-value {
+      color: #a7f3d0;
+      font: 800 clamp(28px, 5vw, 48px) var(--font-display);
+      text-shadow: 0 0 22px rgba(0, 255, 170, 0.35);
+    }
+    .money-table .money-amount { color: #a7f3d0; font-family: var(--font-mono); }
+    @media (max-width: 720px) {
+      .money-grid { grid-template-columns: 1fr; }
     }
     @keyframes focus-breathe {
       0%, 100% { box-shadow: inset 0 0 0 rgba(0, 240, 255, 0); }
@@ -1222,15 +1554,6 @@
       50% { box-shadow: 0 8px 44px var(--accent-glow); }
     }
 
-    .nexus-canvas-box::after {
-      content: '';
-      position: absolute;
-      inset: 12% 24%;
-      border: 1px solid rgba(0, 240, 255, 0.12);
-      border-radius: 50%;
-      pointer-events: none;
-      animation: nexus-orbit 8s linear infinite;
-    }
     @keyframes nexus-orbit {
       from { transform: rotate(0deg) scaleX(1.2); opacity: 0.35; }
       50% { opacity: 0.75; }
@@ -1330,9 +1653,11 @@
   <!-- CUSTOM INTERACTIVE CURSOR -->
   <div id="cursor-dot"></div>
   <div id="cursor-ring"></div>
+  <div class="save-toast" id="save-toast" role="status" aria-live="polite">STATE SAVED LOCALLY</div>
 
   <!-- PERSISTENT AMBIENT BACKGROUND CANVAS -->
   <canvas id="ambient-canvas"></canvas>
+  <img class="ambient-logo-mark" src="logo.png" alt="AK Industries logo" />
 
   <!-- ==========================================================================
        01. CINEMATIC 7-STAGE LOGO INTRO (USING EXACT ORIGINAL MASTER ASSET)
@@ -1379,6 +1704,7 @@
         <a class="nav-item" data-nav="nexus" href="#section-nexus">ECOSYSTEM</a>
         <a class="nav-item" data-nav="lab" href="#section-ai-lab">AI LAB</a>
         <a class="nav-item" data-nav="vault" href="#section-vault">VAULT</a>
+        <a class="nav-item" data-nav="networth" href="#section-net-worth">NET WORTH</a>
       </nav>
 
       <div class="nav-actions">
@@ -1470,6 +1796,12 @@
 
         <div class="nexus-canvas-box">
           <canvas id="nexus-canvas"></canvas>
+          <div class="nexus-hover-panel" id="nexus-hover-panel">
+            <div class="nexus-hover-kicker" id="nexus-hover-kicker">LIVE NODE SIGNAL</div>
+            <div class="nexus-hover-title" id="nexus-hover-title">Hover a node</div>
+            <div class="nexus-hover-copy" id="nexus-hover-copy">Move across the topology to inspect the connected system.</div>
+            <div class="nexus-hover-signal"></div>
+          </div>
           <div class="nexus-legend-bar">
             <div><span class="legend-node-dot" style="background:#00d2ff;"></span>IDENTITY</div>
             <div><span class="legend-node-dot" style="background:#ff007a;"></span>IDEAS FORGE</div>
@@ -1569,7 +1901,10 @@
               <span class="title-accent-bar" style="height: 18px;"></span>
               <span>MISSION TIMELINE</span>
             </div>
-            <span class="tag-chip" id="clock-synced-indicator">ORBITAL TIME</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="tag-chip" id="clock-synced-indicator">ORBITAL TIME</span>
+              <button class="btn-action-sm" id="btn-add-timeline">+ EVENT</button>
+            </div>
           </div>
 
           <div id="timeline-render-container">
@@ -1588,29 +1923,39 @@
           <span class="tag-chip" style="color: #00ffaa; border-color: rgba(0,255,170,0.3);">MODEL: AK-CORE-4-TURBO</span>
         </div>
 
-        <div class="ai-lab-terminal" id="terminal-stream-log">
-          <div>[00:00:01] AK CORE v8.4.2 BOOT COMPLETE.</div>
-          <div>[00:00:02] INITIALIZING TENSOR CORE PIPELINES (10,480 FLOPS ALLOCATED)...</div>
-          <div>[00:00:03] EMBEDDINGS GRAPH SYNCED WITH 14 ACTIVE PROJECTS.</div>
-          <div>[00:00:04] QUANTUM-RESISTANT PROTOCOL READY. LISTENING ON PORT 443...</div>
-          <div>[00:00:05] SYSTEM AWAITING ARCHITECT DISPATCH.<span class="terminal-cursor"></span></div>
+        <div class="ai-lab-stage">
+          <div class="neural-globe-wrap">
+            <canvas id="neural-globe-canvas"></canvas>
+            <div class="neural-globe-pulse"></div>
+            <div class="neural-globe-label">GLOBAL NEURAL MESH // ONLINE</div>
+          </div>
+          <div class="ai-lab-terminal" id="terminal-stream-log">
+            <div>[00:00:01] AK CORE v8.4.2 BOOT COMPLETE.</div>
+            <div>[00:00:02] INITIALIZING TENSOR CORE PIPELINES (10,480 FLOPS ALLOCATED)...</div>
+            <div>[00:00:03] EMBEDDINGS GRAPH SYNCED WITH 14 ACTIVE PROJECTS.</div>
+            <div>[00:00:04] QUANTUM-RESISTANT PROTOCOL READY. LISTENING ON PORT 443...</div>
+            <div>[00:00:05] SYSTEM AWAITING ARCHITECT DISPATCH.<span class="terminal-cursor"></span></div>
+          </div>
         </div>
       </section>
 
-      <!-- SECTION: FOCUS MODE & SOUND PROTOCOL -->
+      <!-- SECTION: EDITABLE WORKTABLE -->
       <section class="cyber-card" style="margin-bottom: 60px;">
-        <div class="focus-hud-box">
-          <button class="filter-btn" id="focus-protocol-badge">&#9679; JARVIS FOCUS LINK</button>
-          <div class="timer-digits-clock" id="pomodoro-clock-val">25:00</div>
-
-          <div class="timer-buttons-row">
-            <button class="filter-btn" data-timer-mins="25">25 MIN</button>
-            <button class="filter-btn" data-timer-mins="50">50 MIN</button>
-            <button class="filter-btn" data-timer-mins="90">90 MIN</button>
-            <button class="btn-glow-pill" id="btn-toggle-pomo-timer">START SESSION</button>
-            <button class="filter-btn" id="btn-toggle-binaural">&#9835; NEURAL HUM</button>
-            <button class="filter-btn" id="btn-reset-focus-timer">RESET TIMER</button>
+        <div class="worktable-toolbar">
+          <div class="section-headline" style="font-size: 20px;">
+            <span class="title-accent-bar" style="height: 18px;"></span>
+            <span>JARVIS WORKTABLE</span>
           </div>
+          <button class="btn-glow-pill" id="btn-add-work-row">+ ADD ROW</button>
+        </div>
+        <div class="worktable-caption">EDIT ANY CELL // CHANGES SAVE LOCALLY</div>
+        <div class="worktable-wrap">
+          <table class="worktable">
+            <thead>
+              <tr><th>Phase</th><th>Work Item</th><th>Owner</th><th>Status</th><th>Priority</th><th></th></tr>
+            </thead>
+            <tbody id="worktable-body"></tbody>
+          </table>
         </div>
       </section>
 
@@ -1658,6 +2003,28 @@
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;" id="vault-render-grid">
           <!-- Dynamically Rendered -->
+        </div>
+      </section>
+
+      <!-- SECTION: NET WORTH TRACKER -->
+      <section id="section-net-worth" class="cyber-card" style="margin-bottom: 60px;">
+        <div class="section-head-bar">
+          <div class="section-headline">
+            <span class="title-accent-bar"></span>
+            <span>NET WORTH TRACKER</span>
+          </div>
+          <button class="btn-glow-pill" id="btn-add-net-row">+ ADD ENTRY</button>
+        </div>
+        <div class="net-worth-total" style="margin-bottom: 20px;">
+          <div class="field-caption">Current Net Worth</div>
+          <div class="net-worth-value" id="net-worth-total">$0</div>
+          <div class="worktable-caption">ASSETS MINUS LIABILITIES // SAVES LOCALLY</div>
+        </div>
+        <div class="worktable-wrap">
+          <table class="worktable">
+            <thead><tr><th>Entry</th><th>Category</th><th>Kind</th><th>Value</th><th></th></tr></thead>
+            <tbody id="net-worth-body"></tbody>
+          </table>
         </div>
       </section>
 
@@ -1841,11 +2208,22 @@
        ========================================================================== */
     const STORAGE_KEY = 'AK_INDUSTRIES_COMMAND_CENTER_STATE_MASTER_V2';
     const THEME_KEY = 'AK_INDUSTRIES_COMMAND_CENTER_THEME_V1';
+    const BOOT_KEY = 'AK_INDUSTRIES_COMMAND_CENTER_BOOT_SEEN_V1';
 
     const INITIAL_STATE = {
       telemetry: {
         focusSeconds: 0
       },
+      worktable: [
+        { id: 'work-1', phase: 'BUILD', item: 'Validate neural runtime flow', owner: 'Aakash J', status: 'IN PROGRESS', priority: 'HIGH' },
+        { id: 'work-2', phase: 'DESIGN', item: 'Refine ecosystem interface', owner: 'Aakash J', status: 'QUEUED', priority: 'MEDIUM' },
+        { id: 'work-3', phase: 'RESEARCH', item: 'Index next architecture notes', owner: 'JARVIS', status: 'QUEUED', priority: 'LOW' }
+      ],
+      netWorth: [
+        { id: 'worth-1', entry: 'AK Industries equity', category: 'BUSINESS', kind: 'ASSET', value: 25000 },
+        { id: 'worth-2', entry: 'Equipment and devices', category: 'HARDWARE', kind: 'ASSET', value: 4200 },
+        { id: 'worth-3', entry: 'Outstanding obligations', category: 'LIABILITY', kind: 'LIABILITY', value: 1800 }
+      ],
       user: {
         name: "Aakash J",
         roles: "Founder of AK Industries",
@@ -1968,13 +2346,26 @@
     }
     AppState.telemetry = AppState.telemetry || { focusSeconds: 0 };
     AppState.telemetry.focusSeconds = Number(AppState.telemetry.focusSeconds) || 0;
+    AppState.worktable = Array.isArray(AppState.worktable) ? AppState.worktable : JSON.parse(JSON.stringify(INITIAL_STATE.worktable));
+    if (!Array.isArray(AppState.netWorth) || (!AppState.netWorth.length && !AppState.netWorthInitialized)) {
+      AppState.netWorth = JSON.parse(JSON.stringify(INITIAL_STATE.netWorth));
+    }
+    AppState.netWorthInitialized = true;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState));
 
     function persistState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState));
       renderDashboard();
+      if (document.getElementById('worktable-body')) renderWorktable();
+      if (document.getElementById('net-worth-body')) renderNetWorth();
       document.body.classList.remove('state-flash');
       requestAnimationFrame(() => document.body.classList.add('state-flash'));
+      const toast = document.getElementById('save-toast');
+      if (toast) {
+        toast.classList.add('visible');
+        clearTimeout(window.saveToastTimer);
+        window.saveToastTimer = setTimeout(() => toast.classList.remove('visible'), 1800);
+      }
     }
 
     function readStoredTheme() {
@@ -2087,11 +2478,18 @@
       const hudText = document.getElementById('intro-hud-text');
       const appShell = document.getElementById('app-shell');
 
+      if (sessionStorage.getItem(BOOT_KEY)) {
+        overlay.remove();
+        appShell.style.opacity = '1';
+        return;
+      }
+
       let completed = false;
 
       function exitBoot() {
         if (completed) return;
         completed = true;
+        sessionStorage.setItem(BOOT_KEY, '1');
         Synth.sweepLaser();
         overlay.classList.add('dismissed');
         appShell.style.opacity = '1';
@@ -2254,6 +2652,7 @@
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       let w, h;
+      const nexusBox = canvas.parentElement;
 
       function resize() {
         const rect = canvas.getBoundingClientRect();
@@ -2264,14 +2663,29 @@
       resize();
 
       const nodes = [
-        { id: 'me', label: 'IDENTITY', color: '#00d2ff', x: 0.15, y: 0.5, radius: 18 },
-        { id: 'ideas', label: 'IDEAS FORGE', color: '#ff007a', x: 0.35, y: 0.3, radius: 14 },
-        { id: 'projects', label: 'PROJECTS OS', color: '#7000ff', x: 0.55, y: 0.7, radius: 16 },
-        { id: 'ak', label: 'AK INDUSTRIES', color: '#ffffff', x: 0.75, y: 0.4, radius: 22 },
-        { id: 'future', label: 'FUTURE HORIZON', color: '#00ffaa', x: 0.90, y: 0.5, radius: 15 }
+        { id: 'me', label: 'IDENTITY', detail: 'Aakash J // Founder of AK Industries', color: '#00d2ff', x: 0.15, y: 0.5, radius: 18 },
+        { id: 'ideas', label: 'IDEAS FORGE', detail: `${AppState.ideas.length} concepts awaiting refinement`, color: '#ff007a', x: 0.35, y: 0.3, radius: 14 },
+        { id: 'projects', label: 'PROJECTS OS', detail: `${AppState.projects.length} project nodes in the build stream`, color: '#7000ff', x: 0.55, y: 0.7, radius: 16 },
+        { id: 'ak', label: 'AK INDUSTRIES', detail: 'Core company layer // intelligence that builds', color: '#ffffff', x: 0.75, y: 0.4, radius: 22 },
+        { id: 'future', label: 'FUTURE HORIZON', detail: 'AI Lab // next-generation runtime frontier', color: '#00ffaa', x: 0.90, y: 0.5, radius: 15 }
       ];
 
       let hoveredNode = null;
+      const hoverPanel = document.getElementById('nexus-hover-panel');
+      const hoverKicker = document.getElementById('nexus-hover-kicker');
+      const hoverTitle = document.getElementById('nexus-hover-title');
+      const hoverCopy = document.getElementById('nexus-hover-copy');
+
+      function updateHoverPanel(node) {
+        if (!node) {
+          hoverPanel.classList.remove('visible');
+          return;
+        }
+        hoverKicker.innerText = `NODE ${node.id.toUpperCase()} // MULTICOMPLEX LINK`;
+        hoverTitle.innerText = node.label;
+        hoverCopy.innerText = node.detail;
+        hoverPanel.classList.add('visible');
+      }
 
       function nodeAtPoint(event) {
         const rect = canvas.getBoundingClientRect();
@@ -2286,10 +2700,17 @@
       canvas.addEventListener('mousemove', event => {
         hoveredNode = nodeAtPoint(event);
         canvas.style.cursor = hoveredNode ? 'pointer' : 'crosshair';
+        updateHoverPanel(hoveredNode);
+        const rect = nexusBox.getBoundingClientRect();
+        const tiltX = ((event.clientY - rect.top) / rect.height - 0.5) * -5;
+        const tiltY = ((event.clientX - rect.left) / rect.width - 0.5) * 7;
+        nexusBox.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(8px)`;
       });
       canvas.addEventListener('mouseleave', () => {
         hoveredNode = null;
         canvas.style.cursor = 'crosshair';
+        updateHoverPanel(null);
+        nexusBox.style.transform = '';
       });
       canvas.addEventListener('click', event => {
         const node = nodeAtPoint(event);
@@ -2310,11 +2731,47 @@
         { from: 'me', to: 'projects' }
       ];
 
+      const dataParticles = Array.from({ length: 34 }, (_, index) => ({
+        edge: index % edges.length,
+        offset: (index * 0.17) % 1,
+        speed: 0.0007 + (index % 5) * 0.00018,
+        size: 1.5 + (index % 3)
+      }));
+
       let pulse = 0;
 
       function draw() {
         ctx.clearRect(0, 0, w, h);
         pulse += 0.02;
+
+        ctx.save();
+        ctx.globalAlpha = 0.38;
+        for (let gridX = 0; gridX < w; gridX += 42) {
+          ctx.strokeStyle = 'rgba(0, 210, 255, 0.08)';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(gridX, 0);
+          ctx.lineTo(gridX, h);
+          ctx.stroke();
+        }
+        for (let gridY = 0; gridY < h; gridY += 42) {
+          ctx.beginPath();
+          ctx.moveTo(0, gridY);
+          ctx.lineTo(w, gridY);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        ctx.save();
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.13)';
+        ctx.lineWidth = 1;
+        for (let depth = 0; depth < 4; depth++) {
+          const inset = 38 + depth * 34 + Math.sin(pulse + depth) * 4;
+          ctx.beginPath();
+          ctx.ellipse(w / 2, h / 2 + depth * 7, w * 0.34 - inset / 4, h * 0.18 - depth * 7, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
 
         edges.forEach(e => {
           const n1 = nodes.find(n => n.id === e.from);
@@ -2327,24 +2784,54 @@
           grad.addColorStop(1, n2.color);
 
           ctx.strokeStyle = grad;
-          ctx.lineWidth = 2;
+          const edgeActive = hoveredNode && (hoveredNode.id === e.from || hoveredNode.id === e.to);
+          ctx.lineWidth = edgeActive ? 4 : 2;
+          ctx.shadowColor = edgeActive ? hoveredNode.color : 'transparent';
+          ctx.shadowBlur = edgeActive ? 18 : 0;
           ctx.beginPath();
           ctx.moveTo(x1, y1);
           ctx.lineTo(x2, y2);
           ctx.stroke();
+          ctx.shadowBlur = 0;
 
           const offset = (Math.sin(pulse + x1) + 1) / 2;
           const px = x1 + (x2 - x1) * offset;
           const py = y1 + (y2 - y1) * offset;
-          ctx.fillStyle = '#fff';
+          ctx.fillStyle = edgeActive ? '#ffffff' : 'rgba(255,255,255,0.7)';
           ctx.beginPath();
-          ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+          ctx.arc(px, py, edgeActive ? 5 : 3.5, 0, Math.PI * 2);
           ctx.fill();
+        });
+
+        dataParticles.forEach(particle => {
+          const edge = edges[particle.edge];
+          const n1 = nodes.find(n => n.id === edge.from);
+          const n2 = nodes.find(n => n.id === edge.to);
+          particle.offset = (particle.offset + particle.speed) % 1;
+          const px = n1.x * w + (n2.x - n1.x) * w * particle.offset;
+          const py = n1.y * h + (n2.y - n1.y) * h * particle.offset;
+          ctx.fillStyle = n2.color;
+          ctx.shadowColor = n2.color;
+          ctx.shadowBlur = 12;
+          ctx.beginPath();
+          ctx.arc(px, py, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
         });
 
         nodes.forEach(n => {
           const nx = n.x * w;
           const ny = n.y * h;
+
+          ctx.save();
+          ctx.globalAlpha = 0.2;
+          ctx.fillStyle = n.color;
+          ctx.shadowColor = n.color;
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.arc(nx + 8, ny + 12, n.radius + 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
 
           ctx.fillStyle = n.color;
           ctx.shadowColor = n.color;
@@ -2353,6 +2840,26 @@
           ctx.arc(nx, ny, hoveredNode?.id === n.id ? n.radius + 4 : n.radius, 0, Math.PI * 2);
           ctx.fill();
           ctx.shadowBlur = 0;
+
+          if (hoveredNode?.id === n.id) {
+            ctx.strokeStyle = n.color;
+            ctx.globalAlpha = 0.7;
+            [n.radius + 10, n.radius + 18, n.radius + 27].forEach((ringRadius, ringIndex) => {
+              ctx.lineWidth = ringIndex === 1 ? 2 : 1;
+              ctx.beginPath();
+              ctx.arc(nx, ny, ringRadius + Math.sin(pulse * 2 + ringIndex) * 3, 0, Math.PI * 2);
+              ctx.stroke();
+            });
+            ctx.globalAlpha = 1;
+          }
+
+          ctx.strokeStyle = n.color;
+          ctx.globalAlpha = 0.2 + ((Math.sin(pulse * 3 + n.x * 10) + 1) / 2) * 0.25;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(nx, ny, n.radius + 9 + Math.sin(pulse * 2 + n.y * 8) * 4, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.globalAlpha = 1;
 
           ctx.fillStyle = '#030508';
           ctx.beginPath();
@@ -2370,7 +2877,57 @@
       draw();
     }
 
-    /* ==========================================================================
+    function renderWorktable() {
+      const body = document.getElementById('worktable-body');
+      if (!body) return;
+      const escapeValue = value => String(value || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+      body.innerHTML = '';
+      if (!AppState.worktable.length) {
+        body.innerHTML = '<tr><td colspan="6"><div class="empty-state">WORKTABLE CLEAR // ADD A ROW TO PLAN YOUR NEXT MOVE</div></td></tr>';
+        return;
+      }
+      AppState.worktable.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input data-field="phase" value="${escapeValue(row.phase)}" aria-label="Phase"></td>
+          <td><input data-field="item" value="${escapeValue(row.item)}" aria-label="Work item"></td>
+          <td><input data-field="owner" value="${escapeValue(row.owner)}" aria-label="Owner"></td>
+          <td><select data-field="status" aria-label="Status">
+            ${['QUEUED', 'IN PROGRESS', 'BLOCKED', 'DONE'].map(status => `<option ${row.status === status ? 'selected' : ''}>${status}</option>`).join('')}
+          </select></td>
+          <td><select data-field="priority" aria-label="Priority">
+            ${['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].map(priority => `<option ${row.priority === priority ? 'selected' : ''}>${priority}</option>`).join('')}
+          </select></td>
+          <td><button class="worktable-delete" data-delete-row aria-label="Delete work row">&times;</button></td>
+        `;
+        tr.querySelectorAll('[data-field]').forEach(field => {
+          field.addEventListener('change', () => {
+            row[field.dataset.field] = field.value;
+            persistState();
+          });
+        });
+        tr.querySelector('[data-delete-row]').addEventListener('click', () => {
+          AppState.worktable = AppState.worktable.filter(item => item.id !== row.id);
+          persistState();
+          Synth.blip(420, 'sine', 0.06);
+        });
+        body.appendChild(tr);
+      });
+    }
+
+    function initWorktable() {
+      renderWorktable();
+      document.getElementById('btn-add-work-row').addEventListener('click', () => {
+        AppState.worktable.push({
+          id: 'work-' + Date.now(), phase: 'NEW', item: 'Untitled work item', owner: AppState.user.name,
+          status: 'QUEUED', priority: 'MEDIUM'
+        });
+        persistState();
+        Synth.blip(720, 'triangle', 0.08);
+      });
+    }
+
+    /* ========================================================================== 
        06. DASHBOARD RENDERING & PERSISTENT DATA
        ========================================================================== */
     function renderDashboard() {
@@ -2430,6 +2987,9 @@
         card.addEventListener('click', () => openProjectModal(p.id));
         projectsGrid.appendChild(card);
       });
+      if (!projectsGrid.children.length) {
+        projectsGrid.innerHTML = '<div class="empty-state">NO PROJECTS IN THIS VIEW // USE QUICK CAPTURE TO START A BUILD</div>';
+      }
       updateFocusPipeline();
 
       // Render Ideas Forge
@@ -2451,22 +3011,36 @@
         `;
         ideasContainer.appendChild(div);
       });
+      if (!ideasContainer.children.length) {
+        ideasContainer.innerHTML = '<div class="empty-state">IDEAS FORGE IS CLEAR // ADD A NEW CONCEPT TO BEGIN</div>';
+      }
 
       // Render Timeline
       const timelineContainer = document.getElementById('timeline-render-container');
       timelineContainer.innerHTML = '';
       AppState.timeline.forEach(item => {
         const div = document.createElement('div');
-        div.className = 'item-entry-card';
+        div.className = 'item-entry-card timeline-entry-card';
         div.innerHTML = `
-          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-            <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent-primary);">${item.date}</span>
-            <span class="tag-chip" style="font-size: 9px;">${item.type}</span>
+          <div class="timeline-edit-grid">
+            <input class="input-text" data-timeline-field="date" value="${item.date.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}" aria-label="Timeline date" />
+            <input class="input-text timeline-title-field" data-timeline-field="title" value="${item.title.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}" aria-label="Timeline title" />
+            <input class="input-text" data-timeline-field="type" value="${item.type.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}" aria-label="Timeline type" />
+            <button class="btn-action-sm" data-timeline-save>SAVE</button>
           </div>
-          <div style="font-size: 13.5px; font-weight: 600; color: #fff;">${item.title}</div>
         `;
+        div.querySelector('[data-timeline-save]').addEventListener('click', () => {
+          item.date = div.querySelector('[data-timeline-field="date"]').value.trim() || item.date;
+          item.title = div.querySelector('[data-timeline-field="title"]').value.trim() || item.title;
+          item.type = div.querySelector('[data-timeline-field="type"]').value.trim() || item.type;
+          persistState();
+          Synth.blip(880, 'sine', 0.08);
+        });
         timelineContainer.appendChild(div);
       });
+      if (!timelineContainer.children.length) {
+        timelineContainer.innerHTML = '<div class="empty-state">NO MILESTONES YET // ADD AN EVENT TO BUILD THE TIMELINE</div>';
+      }
 
       // Render Vault
       const vaultContainer = document.getElementById('vault-render-grid');
@@ -2500,6 +3074,9 @@
         div.querySelectorAll('[data-vault-field]').forEach(field => field.addEventListener('click', event => event.stopPropagation()));
         vaultContainer.appendChild(div);
       });
+      if (!vaultContainer.children.length) {
+        vaultContainer.innerHTML = '<div class="empty-state">KNOWLEDGE VAULT IS EMPTY // CAPTURE A RESEARCH NOTE TO FILL IT</div>';
+      }
 
       // Update Metrics
       document.getElementById('stat-count-projects').innerText = AppState.projects.length;
@@ -2519,6 +3096,20 @@
       entry.snippet = card.querySelector('[data-vault-field="snippet"]').value.trim() || entry.snippet;
       persistState();
       Synth.blip(900, 'sine', 0.1);
+    }
+
+    function initTimelineEditor() {
+      document.getElementById('btn-add-timeline').addEventListener('click', () => {
+        AppState.timeline.push({
+          id: 'time-' + Date.now(),
+          date: 'UPCOMING',
+          title: 'New mission milestone',
+          type: 'MILESTONE'
+        });
+        persistState();
+        document.getElementById('section-timeline').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        Synth.sweepLaser();
+      });
     }
 
     /* Convert Idea into Active Project */
@@ -2652,7 +3243,8 @@
     function initNavigationAndFilters() {
       const sectionMap = {
         command: 'section-command', projects: 'section-projects', ideas: 'section-ideas',
-        ak: 'section-ak-portal', nexus: 'section-nexus', lab: 'section-ai-lab', vault: 'section-vault'
+        ak: 'section-ak-portal', nexus: 'section-nexus', lab: 'section-ai-lab', vault: 'section-vault',
+        networth: 'section-net-worth'
       };
       document.querySelectorAll('[data-nav]').forEach(link => {
         link.addEventListener('click', event => {
@@ -3002,6 +3594,91 @@
             }
           }, 1000);
         }
+
+        function initNeuralGlobe() {
+          const canvas = document.getElementById('neural-globe-canvas');
+          if (!canvas) return;
+          const ctx = canvas.getContext('2d');
+          let width = 0;
+          let height = 0;
+          let rotation = 0;
+
+          const signalNodes = [
+            { lat: 0.55, lon: 0.1 }, { lat: -0.2, lon: 0.8 }, { lat: 0.1, lon: 1.7 },
+            { lat: -0.48, lon: 2.5 }, { lat: 0.35, lon: 3.5 }, { lat: -0.1, lon: 4.5 },
+            { lat: 0.7, lon: 5.2 }
+          ];
+
+          function resize() {
+            const rect = canvas.getBoundingClientRect();
+            width = canvas.width = Math.max(1, rect.width);
+            height = canvas.height = Math.max(1, rect.height);
+          }
+          window.addEventListener('resize', resize);
+          resize();
+
+          function draw() {
+            const centerX = width / 2;
+            const centerY = height / 2 - 8;
+            const radius = Math.min(width, height) * 0.34;
+            rotation += 0.006;
+            ctx.clearRect(0, 0, width, height);
+
+            const glow = ctx.createRadialGradient(centerX - radius * 0.35, centerY - radius * 0.4, 2, centerX, centerY, radius * 1.15);
+            glow.addColorStop(0, 'rgba(167, 243, 208, 0.24)');
+            glow.addColorStop(0.55, 'rgba(0, 255, 170, 0.1)');
+            glow.addColorStop(1, 'rgba(0, 255, 170, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius * 1.25, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = 'rgba(94, 234, 212, 0.7)';
+            ctx.shadowColor = '#00ffaa';
+            ctx.shadowBlur = 18;
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            for (let latitude = -2; latitude <= 2; latitude++) {
+              const latitudeY = centerY + latitude * radius * 0.28;
+              const latitudeWidth = Math.sqrt(Math.max(0, radius * radius - (latitude * radius * 0.28) ** 2));
+              ctx.strokeStyle = `rgba(94, 234, 212, ${latitude === 0 ? 0.65 : 0.28})`;
+              ctx.beginPath();
+              ctx.ellipse(centerX, latitudeY, latitudeWidth, Math.max(3, radius * 0.12), 0, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+
+            for (let meridian = 0; meridian < 6; meridian++) {
+              const squeeze = Math.abs(Math.sin(rotation + meridian * Math.PI / 3));
+              ctx.strokeStyle = 'rgba(0, 210, 255, 0.3)';
+              ctx.beginPath();
+              ctx.ellipse(centerX, centerY, Math.max(4, radius * squeeze), radius, 0, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+
+            signalNodes.forEach((node, index) => {
+              const longitude = node.lon + rotation;
+              const x = centerX + Math.cos(longitude) * radius * Math.cos(node.lat);
+              const y = centerY + Math.sin(node.lat) * radius;
+              const depth = (Math.cos(longitude) + 1) / 2;
+              if (depth < 0.08) return;
+              ctx.fillStyle = index % 2 ? '#00d2ff' : '#a7f3d0';
+              ctx.globalAlpha = 0.35 + depth * 0.65;
+              ctx.shadowColor = '#00ffaa';
+              ctx.shadowBlur = 12;
+              ctx.beginPath();
+              ctx.arc(x, y, 2 + depth * 2, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.shadowBlur = 0;
+            });
+            ctx.globalAlpha = 1;
+            requestAnimationFrame(draw);
+          }
+          draw();
+        }
       });
 
       document.getElementById('btn-toggle-binaural').addEventListener('click', (e) => {
@@ -3024,6 +3701,132 @@
         focusBox.classList.toggle('focus-engaged');
         focusBadge.innerText = focusBox.classList.contains('focus-engaged') ? '◉ JARVIS FOCUS ENGAGED' : '○ JARVIS FOCUS LINK';
         Synth.blip(680, 'triangle', 0.07);
+      });
+    }
+
+    function initNeuralGlobe() {
+      const canvas = document.getElementById('neural-globe-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = 1;
+      let height = 1;
+      let rotation = 0;
+      const signalNodes = [0.1, 0.8, 1.7, 2.5, 3.5, 4.5, 5.2].map((lon, index) => ({
+        lon,
+        lat: [-0.2, 0.1, -0.48, 0.35, -0.1, 0.7, 0.55][index]
+      }));
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        width = canvas.width = Math.max(1, Math.floor(rect.width));
+        height = canvas.height = Math.max(1, Math.floor(rect.height));
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      function draw() {
+        const cx = width / 2;
+        const cy = height / 2 - 8;
+        const radius = Math.min(width, height) * 0.34;
+        rotation += 0.006;
+        ctx.clearRect(0, 0, width, height);
+
+        const glow = ctx.createRadialGradient(cx - radius * 0.35, cy - radius * 0.4, 2, cx, cy, radius * 1.2);
+        glow.addColorStop(0, 'rgba(167, 243, 208, 0.24)');
+        glow.addColorStop(0.55, 'rgba(0, 255, 170, 0.1)');
+        glow.addColorStop(1, 'rgba(0, 255, 170, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius * 1.25, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(94, 234, 212, 0.65)';
+        ctx.shadowColor = '#00ffaa';
+        ctx.shadowBlur = 18;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        for (let latitude = -2; latitude <= 2; latitude++) {
+          const y = cy + latitude * radius * 0.28;
+          const ellipseWidth = Math.sqrt(Math.max(0, radius * radius - (latitude * radius * 0.28) ** 2));
+          ctx.strokeStyle = `rgba(94, 234, 212, ${latitude === 0 ? 0.6 : 0.25})`;
+          ctx.beginPath();
+          ctx.ellipse(cx, y, ellipseWidth, Math.max(3, radius * 0.12), 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        for (let meridian = 0; meridian < 6; meridian++) {
+          ctx.strokeStyle = 'rgba(0, 210, 255, 0.3)';
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, Math.max(4, radius * Math.abs(Math.sin(rotation + meridian * Math.PI / 3))), radius, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        signalNodes.forEach((node, index) => {
+          const longitude = node.lon + rotation;
+          const depth = (Math.cos(longitude) + 1) / 2;
+          if (depth < 0.08) return;
+          const x = cx + Math.cos(longitude) * radius * Math.cos(node.lat);
+          const y = cy + Math.sin(node.lat) * radius;
+          ctx.fillStyle = index % 2 ? '#00d2ff' : '#a7f3d0';
+          ctx.globalAlpha = 0.35 + depth * 0.65;
+          ctx.shadowColor = '#00ffaa';
+          ctx.shadowBlur = 12;
+          ctx.beginPath();
+          ctx.arc(x, y, 2 + depth * 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        });
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    function renderNetWorth() {
+      const body = document.getElementById('net-worth-body');
+      if (!body) return;
+      const currency = value => `$${Number(value || 0).toLocaleString()}`;
+      const escapeValue = value => String(value || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+      const total = AppState.netWorth.reduce((sum, row) => sum + (row.kind === 'LIABILITY' ? -Number(row.value || 0) : Number(row.value || 0)), 0);
+      document.getElementById('net-worth-total').innerText = currency(total);
+      body.innerHTML = '';
+      if (!AppState.netWorth.length) {
+        body.innerHTML = '<tr><td colspan="5"><div class="empty-state">NO FINANCIAL ENTRIES // ADD AN ASSET OR LIABILITY</div></td></tr>';
+        return;
+      }
+      AppState.netWorth.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input data-worth-field="entry" value="${escapeValue(row.entry)}" aria-label="Net worth entry"></td>
+          <td><input data-worth-field="category" value="${escapeValue(row.category)}" aria-label="Net worth category"></td>
+          <td><select data-worth-field="kind" aria-label="Asset or liability"><option ${row.kind === 'ASSET' ? 'selected' : ''}>ASSET</option><option ${row.kind === 'LIABILITY' ? 'selected' : ''}>LIABILITY</option></select></td>
+          <td><input class="money-amount" data-worth-field="value" type="number" min="0" step="100" value="${Number(row.value || 0)}" aria-label="Net worth value"></td>
+          <td><button class="worktable-delete" data-delete-worth aria-label="Delete net worth entry">&times;</button></td>
+        `;
+        tr.querySelectorAll('[data-worth-field]').forEach(field => {
+          field.addEventListener('change', () => {
+            row[field.dataset.worthField] = field.type === 'number' ? Number(field.value) || 0 : field.value;
+            persistState();
+          });
+        });
+        tr.querySelector('[data-delete-worth]').addEventListener('click', () => {
+          AppState.netWorth = AppState.netWorth.filter(item => item.id !== row.id);
+          persistState();
+          Synth.blip(420, 'sine', 0.06);
+        });
+        body.appendChild(tr);
+      });
+    }
+
+    function initNetWorth() {
+      renderNetWorth();
+      document.getElementById('btn-add-net-row').addEventListener('click', () => {
+        AppState.netWorth.push({ id: 'worth-' + Date.now(), entry: 'New financial entry', category: 'GENERAL', kind: 'ASSET', value: 0 });
+        persistState();
+        Synth.blip(720, 'triangle', 0.08);
       });
     }
 
@@ -3169,9 +3972,12 @@
       initCommandPalette();
       initAICore();
       initNeuralRuntime();
+      initNeuralGlobe();
       initQuickCapture();
-      initFocusTimer();
+      initWorktable();
+      initNetWorth();
       initMetricResets();
+      initTimelineEditor();
       initThemeAndDevMode();
       initCustomCursor();
     });
