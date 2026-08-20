@@ -1,0 +1,2815 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ak-flagship">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AK INDUSTRIES // Personal Command Center OS</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       01. SYSTEM TOKENS & DYNAMIC THEMES
+       ========================================================================== */
+    :root {
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Space Grotesk', sans-serif;
+      --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    [data-theme="ak-flagship"] {
+      --bg-void: #010204;
+      --bg-base: #03060a;
+      --bg-surface: rgba(8, 14, 24, 0.75);
+      --bg-surface-elevated: rgba(14, 22, 38, 0.88);
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(0, 140, 255, 0.35);
+      --text-main: #f0f4f9;
+      --text-muted: #8493a8;
+      --text-dim: #455060;
+      --accent-primary: #0088ff;
+      --accent-secondary: #7000ff;
+      --accent-highlight: #00f0ff;
+      --accent-glow: rgba(0, 136, 255, 0.45);
+      --accent-gradient: linear-gradient(135deg, #0088ff 0%, #7000ff 100%);
+      --metallic-silver: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #475569 100%);
+      --status-building: #00f0ff;
+      --status-deepwork: #7000ff;
+      --status-exploring: #ff007a;
+      --status-planning: #ffaa00;
+    }
+
+    [data-theme="night-core"] {
+      --bg-void: #000000;
+      --bg-base: #020408;
+      --bg-surface: rgba(6, 12, 22, 0.8);
+      --bg-surface-elevated: rgba(10, 18, 32, 0.9);
+      --bg-glass: rgba(0, 180, 255, 0.03);
+      --border-subtle: rgba(0, 180, 255, 0.12);
+      --border-glow: rgba(0, 180, 255, 0.45);
+      --text-main: #edf2f7;
+      --text-muted: #718096;
+      --text-dim: #4a5568;
+      --accent-primary: #00d2ff;
+      --accent-secondary: #0066ff;
+      --accent-highlight: #60a5fa;
+      --accent-glow: rgba(0, 210, 255, 0.5);
+      --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #0066ff 100%);
+      --metallic-silver: linear-gradient(135deg, #ffffff 0%, #cbd5e0 50%, #4a5568 100%);
+      --status-building: #00d2ff;
+      --status-deepwork: #0066ff;
+      --status-exploring: #e056fd;
+      --status-planning: #f0932b;
+    }
+
+    [data-theme="violet-ai"] {
+      --bg-void: #020005;
+      --bg-base: #05020a;
+      --bg-surface: rgba(18, 9, 32, 0.75);
+      --bg-surface-elevated: rgba(28, 14, 50, 0.88);
+      --bg-glass: rgba(180, 0, 255, 0.03);
+      --border-subtle: rgba(180, 0, 255, 0.14);
+      --border-glow: rgba(180, 0, 255, 0.45);
+      --text-main: #f5f0fa;
+      --text-muted: #a190b5;
+      --text-dim: #5d4d70;
+      --accent-primary: #b400ff;
+      --accent-secondary: #ff0099;
+      --accent-highlight: #e879f9;
+      --accent-glow: rgba(180, 0, 255, 0.5);
+      --accent-gradient: linear-gradient(135deg, #b400ff 0%, #ff0099 100%);
+      --metallic-silver: linear-gradient(135deg, #ffffff 0%, #d8b4f8 50%, #581c87 100%);
+      --status-building: #b400ff;
+      --status-deepwork: #ff0099;
+      --status-exploring: #00f0ff;
+      --status-planning: #ffbd00;
+    }
+
+    [data-theme="cyber-cyan"] {
+      --bg-void: #000405;
+      --bg-base: #010a0c;
+      --bg-surface: rgba(3, 26, 28, 0.75);
+      --bg-surface-elevated: rgba(6, 42, 46, 0.88);
+      --bg-glass: rgba(0, 255, 213, 0.03);
+      --border-subtle: rgba(0, 255, 213, 0.14);
+      --border-glow: rgba(0, 255, 213, 0.45);
+      --text-main: #e6fffa;
+      --text-muted: #78aba4;
+      --text-dim: #3b655f;
+      --accent-primary: #00ffd5;
+      --accent-secondary: #00a8ff;
+      --accent-highlight: #5eead4;
+      --accent-glow: rgba(0, 255, 213, 0.5);
+      --accent-gradient: linear-gradient(135deg, #00ffd5 0%, #00a8ff 100%);
+      --metallic-silver: linear-gradient(135deg, #ffffff 0%, #b2f5ea 50%, #234e52 100%);
+      --status-building: #00ffd5;
+      --status-deepwork: #00a8ff;
+      --status-exploring: #ff3366;
+      --status-planning: #ffd200;
+    }
+
+    [data-theme="minimal-silver"] {
+      --bg-void: #050506;
+      --bg-base: #0a0a0c;
+      --bg-surface: rgba(18, 18, 22, 0.8);
+      --bg-surface-elevated: rgba(28, 28, 34, 0.9);
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --border-glow: rgba(255, 255, 255, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #475569;
+      --accent-primary: #e2e8f0;
+      --accent-secondary: #94a3b8;
+      --accent-highlight: #ffffff;
+      --accent-glow: rgba(255, 255, 255, 0.3);
+      --accent-gradient: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      --metallic-silver: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #475569 100%);
+      --status-building: #ffffff;
+      --status-deepwork: #94a3b8;
+      --status-exploring: #64748b;
+      --status-planning: #e2e8f0;
+    }
+
+    /* ==========================================================================
+       02. RESET & BASE SETUP
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    ::selection {
+      background: var(--accent-primary);
+      color: #000;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-subtle);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-primary);
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      outline: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ==========================================================================
+       03. INTERACTIVE CUSTOM CURSOR
+       ========================================================================== */
+    #cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border-glow);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease-out, width 0.25s var(--ease-spring), height 0.25s var(--ease-spring), border-color 0.25s;
+    }
+    body.cursor-hover #cursor-ring {
+      width: 54px;
+      height: 54px;
+      border-color: var(--accent-highlight);
+      background: rgba(0, 140, 255, 0.05);
+    }
+
+    /* ==========================================================================
+       04. PERSISTENT BACKGROUND CANVAS
+       ========================================================================== */
+    #ambient-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.85;
+    }
+
+    /* ==========================================================================
+       05. CINEMATIC 7-STAGE LOGO INTRO (USING EXACT ORIGINAL IMAGE ASSET)
+       ========================================================================== */
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.2s var(--ease-cinematic), transform 1.2s var(--ease-cinematic), visibility 1.2s;
+    }
+
+    #intro-overlay.dismissed {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: scale(2.4);
+    }
+
+    .intro-logo-viewport {
+      position: relative;
+      width: min(880px, 90vw);
+      aspect-ratio: 2 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Layered presentation of the EXACT original uploaded logo image */
+    .master-logo-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      transition: opacity 0.8s var(--ease-cinematic), clip-path 1.2s var(--ease-cinematic), filter 0.8s;
+    }
+
+    /* Laser scanning bar overlay during construction */
+    #laser-scan-bar {
+      position: absolute;
+      top: 15%;
+      bottom: 15%;
+      width: 3px;
+      background: linear-gradient(180deg, transparent, #00f0ff, #fff, #00f0ff, transparent);
+      box-shadow: 0 0 25px #00f0ff, 0 0 50px #00f0ff;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      transition: left 1.2s var(--ease-cinematic), opacity 0.3s;
+    }
+
+    /* Light sweep shine effect */
+    .logo-shine-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.7) 50%, transparent 65%);
+      mix-blend-mode: overlay;
+      opacity: 0;
+      transform: translateX(-100%);
+      transition: transform 1.4s ease-in-out, opacity 0.3s;
+      pointer-events: none;
+    }
+
+    /* Intro HUD Status */
+    .intro-status-hud {
+      position: absolute;
+      bottom: 85px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .intro-pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-highlight);
+      box-shadow: 0 0 10px var(--accent-highlight);
+      animation: blink 1.2s infinite ease-in-out;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    .intro-skip-btn {
+      position: absolute;
+      bottom: 35px;
+      padding: 9px 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      border-radius: 100px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s var(--ease-cinematic);
+    }
+    .intro-skip-btn:hover {
+      color: #fff;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* ==========================================================================
+       06. MAIN SHELL & TOP NAVIGATION
+       ========================================================================== */
+    #app-shell {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      opacity: 0;
+      transition: opacity 0.8s var(--ease-cinematic);
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 76px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(1, 2, 4, 0.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+    }
+    .nav-master-logo {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+      transition: transform 0.3s var(--ease-spring), filter 0.3s;
+    }
+    .nav-master-logo:hover {
+      transform: scale(1.04);
+      filter: drop-shadow(0 0 16px var(--accent-glow));
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-item {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      transition: color 0.2s, text-shadow 0.2s;
+      position: relative;
+      padding: 6px 0;
+      cursor: pointer;
+    }
+    .nav-item:hover, .nav-item.active {
+      color: #fff;
+      text-shadow: 0 0 12px var(--accent-glow);
+    }
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent-primary);
+      box-shadow: 0 0 10px var(--accent-primary);
+      border-radius: 2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-cmd-search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.25s var(--ease-cinematic);
+    }
+    .btn-cmd-search:hover {
+      border-color: var(--accent-primary);
+      color: #fff;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .key-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 10px;
+      color: #fff;
+    }
+
+    .btn-glow-pill {
+      background: var(--accent-gradient);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px var(--accent-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-glow-pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px var(--accent-glow);
+    }
+
+    /* ==========================================================================
+       07. GRID LAYOUT & CYBER CARDS
+       ========================================================================== */
+    .page-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 40px 100px;
+      width: 100%;
+    }
+
+    .cyber-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s var(--ease-cinematic), border-color 0.35s, box-shadow 0.35s;
+    }
+    .cyber-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    }
+    .cyber-card:hover {
+      border-color: var(--border-glow);
+      box-shadow: 0 12px 35px -10px var(--accent-glow);
+    }
+
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       08. HERO COMMAND HUB & IDENTITY
+       ========================================================================== */
+    .hero-split-hub {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .time-greeting {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .time-greeting::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      box-shadow: 0 0 10px var(--accent-primary);
+      animation: blink 2s infinite ease-in-out;
+    }
+
+    .hero-title-glitch {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4.5vw, 54px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, #ffffff 30%, #8ea3bf 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .identity-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .user-name-box {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      border-bottom: 1px dashed var(--border-subtle);
+      padding-bottom: 2px;
+      cursor: pointer;
+    }
+    .user-name-box:hover {
+      border-color: var(--accent-primary);
+    }
+    .user-role-label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .live-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      padding: 7px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .live-status-pill:hover {
+      border-color: var(--accent-primary);
+    }
+
+    .status-dot-core {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .dot-building { background: var(--status-building); box-shadow: 0 0 10px var(--status-building); }
+    .dot-deepwork { background: var(--status-deepwork); box-shadow: 0 0 10px var(--status-deepwork); }
+    .dot-exploring { background: var(--status-exploring); box-shadow: 0 0 10px var(--status-exploring); }
+    .dot-planning { background: var(--status-planning); box-shadow: 0 0 10px var(--status-planning); }
+
+    /* CURRENT FOCUS STAGE PIPELINE */
+    .pipeline-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .stage-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin: 22px 0;
+    }
+    .step-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .step-bar-fill {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      transition: background 0.3s;
+    }
+    .step-unit.active .step-bar-fill {
+      background: var(--accent-primary);
+      box-shadow: 0 0 12px var(--accent-primary);
+    }
+    .step-unit.complete .step-bar-fill {
+      background: #00ffaa;
+    }
+    .step-name {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .step-unit.active .step-name {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       09. INTERACTIVE RELATIONAL NEXUS GRAPH
+       ========================================================================== */
+    .nexus-wrap-section {
+      margin-bottom: 50px;
+    }
+    .nexus-canvas-box {
+      width: 100%;
+      height: 400px;
+      position: relative;
+      border-radius: 20px;
+      background: radial-gradient(circle at 50% 50%, rgba(14, 24, 46, 0.6) 0%, rgba(1, 2, 4, 0.95) 100%);
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+    }
+    #nexus-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .nexus-legend-bar {
+      position: absolute;
+      bottom: 20px;
+      left: 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      pointer-events: none;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .legend-node-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+
+    /* ==========================================================================
+       10. SECTION HEADERS & FILTER CONTROLS
+       ========================================================================== */
+    .section-head-bar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .section-headline {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .title-accent-bar {
+      width: 4px;
+      height: 24px;
+      border-radius: 2px;
+      background: var(--accent-primary);
+      box-shadow: 0 0 10px var(--accent-primary);
+    }
+    .filter-pills-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: var(--accent-primary);
+    }
+
+    /* ==========================================================================
+       11. PROJECTS OPERATING SYSTEM GRID
+       ========================================================================== */
+    .projects-grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+
+    .project-node-card {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 290px;
+    }
+    .project-node-card:hover {
+      transform: translateY(-4px);
+    }
+    .project-header-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .project-title-text {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .project-desc-body {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 18px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .project-chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .tech-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+    }
+
+    .progress-bar-slot {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .progress-bar-glow {
+      height: 100%;
+      background: var(--accent-gradient);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--accent-primary);
+    }
+
+    /* ==========================================================================
+       12. AK INDUSTRIES FLAGSHIP SECTION (USING EXACT ORIGINAL MASTER ASSET)
+       ========================================================================== */
+    .ak-portal-card {
+      background: radial-gradient(circle at 85% 20%, rgba(0, 136, 255, 0.16), transparent 60%),
+                  linear-gradient(180deg, rgba(14, 22, 38, 0.92) 0%, rgba(6, 10, 18, 0.96) 100%);
+      border: 1px solid rgba(0, 136, 255, 0.3);
+      border-radius: 24px;
+      padding: 46px;
+      margin-bottom: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ak-portal-card::after {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+      filter: blur(80px);
+    }
+    .ak-master-logo-display {
+      max-width: 440px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 22px;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.8));
+    }
+    .ak-headline-tagline {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .ak-divisions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 32px;
+    }
+    .ak-division-box {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .ak-div-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ==========================================================================
+       13. SPLIT COLUMNS: IDEAS FORGE & MISSION TIMELINE
+       ========================================================================== */
+    .split-col-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .item-entry-card {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .item-entry-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border-glow);
+    }
+    .item-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .btn-action-sm {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(0, 136, 255, 0.18);
+      color: var(--accent-primary);
+      border: 1px solid rgba(0, 136, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-action-sm:hover {
+      background: var(--accent-primary);
+      color: #000;
+    }
+
+    /* ==========================================================================
+       14. AK AI LAB & STREAMING CONSOLE
+       ========================================================================== */
+    .ai-lab-terminal {
+      background: #020306;
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #7dd3fc;
+      line-height: 1.6;
+      height: 180px;
+      overflow-y: auto;
+    }
+    .terminal-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: #00f0ff;
+      vertical-align: middle;
+      animation: blink 1s infinite;
+    }
+
+    /* ==========================================================================
+       15. FOCUS MODE PROTOCOL & TIMER
+       ========================================================================== */
+    .focus-hud-box {
+      text-align: center;
+      padding: 34px;
+    }
+    .timer-digits-clock {
+      font-family: var(--font-mono);
+      font-size: 58px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: #fff;
+      text-shadow: 0 0 24px var(--accent-glow);
+      margin: 18px 0;
+    }
+    .timer-buttons-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* ==========================================================================
+       16. METRICS & ANALYTICS
+       ========================================================================== */
+    .metrics-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .metric-hud-card {
+      text-align: center;
+      padding: 24px 16px;
+    }
+    .metric-number-bold {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+      background: var(--metallic-silver);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ==========================================================================
+       17. MODAL ENGINE (SEARCH, AI ADVISOR, INSPECTOR, CAPTURE, DEV MODE)
+       ========================================================================== */
+    .modal-overlay-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(14px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s var(--ease-cinematic);
+    }
+    .modal-overlay-bg.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-frame {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-glow);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px var(--accent-glow);
+      transform: scale(0.94) translateY(20px);
+      transition: transform 0.3s var(--ease-spring);
+    }
+    .modal-overlay-bg.active .modal-frame {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-top-bar {
+      padding: 20px 26px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-headline {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-close-trigger {
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 22px;
+      transition: color 0.2s;
+    }
+    .modal-close-trigger:hover { color: #fff; }
+
+    .modal-scroll-body {
+      padding: 26px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* FORM STYLES */
+    .field-wrap {
+      margin-bottom: 18px;
+    }
+    .field-caption {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .input-text, .textarea-text, .select-dropdown {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-text:focus, .textarea-text:focus, .select-dropdown:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+    .textarea-text {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* FLOATING QUICK CAPTURE BUTTON */
+    .floating-action-fab {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 26px;
+      border-radius: 100px;
+      background: var(--accent-gradient);
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 8px 32px var(--accent-glow);
+      transition: transform 0.25s var(--ease-spring), box-shadow 0.25s;
+    }
+    .floating-action-fab:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 42px var(--accent-glow);
+    }
+
+    /* ==========================================================================
+       18. FOOTER
+       ========================================================================== */
+    .master-footer {
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(1, 2, 4, 0.95);
+      padding: 60px 40px 40px;
+      position: relative;
+      z-index: 10;
+    }
+    .footer-content-wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* ==========================================================================
+       19. RESPONSIVE MOBILE BAR
+       ========================================================================== */
+    .mobile-dock-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 64px;
+      background: rgba(1, 2, 4, 0.94);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-subtle);
+      z-index: 99;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 10px;
+    }
+    .mobile-dock-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .mobile-dock-btn.active {
+      color: var(--accent-primary);
+    }
+
+    @media (max-width: 1024px) {
+      .hero-split-hub, .split-col-layout {
+        grid-template-columns: 1fr;
+      }
+      .metrics-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .top-nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .page-container { padding: 20px 16px 90px; }
+      .mobile-dock-nav { display: flex; }
+      .floating-action-fab { bottom: 80px; right: 20px; padding: 10px 20px; }
+      .metrics-stats-grid { grid-template-columns: 1fr; }
+      .ak-portal-card { padding: 26px; }
+      #cursor-dot, #cursor-ring { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CUSTOM INTERACTIVE CURSOR -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- PERSISTENT AMBIENT BACKGROUND CANVAS -->
+  <canvas id="ambient-canvas"></canvas>
+
+  <!-- ==========================================================================
+       01. CINEMATIC 7-STAGE LOGO INTRO (USING EXACT ORIGINAL MASTER ASSET)
+       ========================================================================== -->
+  <div id="intro-overlay">
+    <div class="intro-logo-viewport">
+      <!-- 
+        EXACT SOURCE OF TRUTH: The uploaded AK INDUSTRIES image is rendered directly.
+        Masking / clip-paths are applied strictly to this authentic image.
+      -->
+      <img id="master-logo-asset" class="master-logo-layer" src="logo.png" alt="AK INDUSTRIES Official Logo" />
+      
+      <!-- Precision Scanning Laser Beam -->
+      <div id="laser-scan-bar"></div>
+
+      <!-- Light Sweep Overlay -->
+      <div class="logo-shine-layer" id="logo-shine-effect"></div>
+    </div>
+
+    <div class="intro-status-hud" id="intro-hud-label">
+      <span class="intro-pulse-dot"></span>
+      <span id="intro-hud-text">AK CORE // SYSTEM BOOT SEQUENCE</span>
+    </div>
+
+    <button class="intro-skip-btn" id="btn-skip-boot">ENTER DIGITAL HEADQUARTERS &rarr;</button>
+  </div>
+
+  <!-- ==========================================================================
+       02. MAIN COMMAND CENTER OPERATING SYSTEM
+       ========================================================================== -->
+  <div id="app-shell">
+
+    <!-- TOP NAVIGATION -->
+    <header class="top-nav">
+      <div class="nav-brand-wrap" id="logo-easter-trigger" title="Click 5 times for Developer Root Access">
+        <img class="nav-master-logo" src="logo.png" alt="AK INDUSTRIES" />
+      </div>
+
+      <nav class="nav-links">
+        <a class="nav-item active" data-nav="command" href="#section-command">COMMAND</a>
+        <a class="nav-item" data-nav="projects" href="#section-projects">PROJECTS</a>
+        <a class="nav-item" data-nav="ideas" href="#section-ideas">IDEAS</a>
+        <a class="nav-item" data-nav="ak" href="#section-ak-portal">AK INDUSTRIES</a>
+        <a class="nav-item" data-nav="nexus" href="#section-nexus">ECOSYSTEM</a>
+        <a class="nav-item" data-nav="lab" href="#section-ai-lab">AI LAB</a>
+        <a class="nav-item" data-nav="vault" href="#section-vault">VAULT</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn-cmd-search" id="btn-open-palette">
+          <span>Search OS</span>
+          <span class="key-badge">Ctrl + K</span>
+        </button>
+
+        <button class="btn-glow-pill" id="btn-open-assistant">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+          <span>AK CORE</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="page-container">
+
+      <!-- SECTION: HERO PERSONAL IDENTITY & CURRENT FOCUS -->
+      <section id="section-command" class="hero-split-hub">
+        <div class="cyber-card">
+          <div class="time-greeting" id="dynamic-time-greeting">GOOD EVENING, ARCHITECT</div>
+          <h1 class="hero-title-glitch">PERSONAL COMMAND CENTER</h1>
+
+          <div class="identity-row">
+            <span class="user-name-box" id="display-user-name" title="Click to customize name">ALEXANDER K.</span>
+            <span class="user-role-label" id="display-user-roles">Founder / AI Architect / Technologist / Systems Builder</span>
+          </div>
+
+          <div style="margin-bottom: 22px;">
+            <span class="live-status-pill" id="status-pill-toggle" title="Click to switch active status">
+              <span class="status-dot-core dot-building" id="status-dot-indicator"></span>
+              <span id="status-text-display">🟢 CURRENTLY BUILDING</span>
+            </span>
+          </div>
+
+          <p style="font-size: 14.5px; color: var(--text-muted); line-height: 1.6;" id="display-user-motto">
+            "Build. Explore. Learn. Create. Transform. Engineering autonomous intelligence architectures and high-velocity digital systems."
+          </p>
+        </div>
+
+        <!-- CURRENTLY BUILDING RADIAL PIPELINE -->
+        <div class="cyber-card pipeline-container">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div>
+                <span class="tag-chip">ACTIVE SPRINT</span>
+                <h3 style="font-family: var(--font-display); font-size: 19px; color: #fff; margin-top: 6px;" id="focus-pipeline-name">
+                  Neural Matrix OS v4.2
+                </h3>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--accent-primary);" id="focus-pipeline-pct">
+                74%
+              </span>
+            </div>
+
+            <div class="progress-bar-slot">
+              <div class="progress-bar-glow" id="focus-pipeline-bar" style="width: 74%;"></div>
+            </div>
+
+            <div class="stage-steps-grid">
+              <div class="step-unit complete"><div class="step-bar-fill"></div><span class="step-name">Idea</span></div>
+              <div class="step-unit complete"><div class="step-bar-fill"></div><span class="step-name">Plan</span></div>
+              <div class="step-unit complete"><div class="step-bar-fill"></div><span class="step-name">Design</span></div>
+              <div class="step-unit active"><div class="step-bar-fill"></div><span class="step-name">Dev</span></div>
+              <div class="step-unit"><div class="step-bar-fill"></div><span class="step-name">Test</span></div>
+              <div class="step-unit"><div class="step-bar-fill"></div><span class="step-name">Launch</span></div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
+            <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">Next Task: Optimize WebGPU Cluster Buffers</span>
+            <button class="btn-action-sm" id="btn-quick-inspect-focus">INSPECT &rarr;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: INTERACTIVE RELATIONAL NEXUS GRAPH -->
+      <section id="section-nexus" class="nexus-wrap-section">
+        <div class="section-head-bar">
+          <div class="section-headline">
+            <span class="title-accent-bar"></span>
+            <span>SYSTEM NEXUS & LIVE ECOSYSTEM</span>
+          </div>
+          <span class="tag-chip">NEURAL TOPOLOGY</span>
+        </div>
+
+        <div class="nexus-canvas-box">
+          <canvas id="nexus-canvas"></canvas>
+          <div class="nexus-legend-bar">
+            <div><span class="legend-node-dot" style="background:#00d2ff;"></span>IDENTITY</div>
+            <div><span class="legend-node-dot" style="background:#ff007a;"></span>IDEAS FORGE</div>
+            <div><span class="legend-node-dot" style="background:#7000ff;"></span>PROJECTS OS</div>
+            <div><span class="legend-node-dot" style="background:#ffffff;"></span>AK INDUSTRIES</div>
+            <div><span class="legend-node-dot" style="background:#00ffaa;"></span>FUTURE HORIZON</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: AK INDUSTRIES FLAGSHIP PORTAL (EXACT MASTER ASSET EMBED) -->
+      <section id="section-ak-portal" class="ak-portal-card">
+        <img class="ak-master-logo-display" src="logo.png" alt="AK INDUSTRIES Master Asset" />
+
+        <div class="ak-headline-tagline">INTELLIGENCE THAT BUILDS. TECHNOLOGY THAT TRANSFORMS.</div>
+        <p style="max-width: 760px; color: var(--text-muted); font-size: 14.5px; line-height: 1.6;">
+          AK INDUSTRIES is the technological foundation for advanced computing paradigms, recursive autonomous AI engines, and ultra-scalable developer infrastructure. Powering mission-critical platforms worldwide.
+        </p>
+
+        <div class="ak-divisions-grid">
+          <div class="ak-division-box">
+            <div class="ak-div-title">
+              <span style="color: var(--accent-primary);">&#9670;</span>
+              <span>Autonomous Systems Lab</span>
+            </div>
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">
+              Multi-agent coordination protocols, zero-latency inference meshes, and sovereign AI tooling.
+            </p>
+          </div>
+
+          <div class="ak-division-box">
+            <div class="ak-div-title">
+              <span style="color: var(--accent-secondary);">&#9670;</span>
+              <span>Edge & Quantum Acceleration</span>
+            </div>
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">
+              FP8 model quantization engines, hardware accelerators, and distributed local networks.
+            </p>
+          </div>
+
+          <div class="ak-division-box">
+            <div class="ak-div-title">
+              <span style="color: #00ffaa;">&#9670;</span>
+              <span>Next-Gen Cloud Platforms</span>
+            </div>
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">
+              Spatial computing OS layers, real-time WebAssembly runtimes, and distributed state databases.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: PROJECTS OPERATING SYSTEM -->
+      <section id="section-projects" style="margin-bottom: 60px;">
+        <div class="section-head-bar">
+          <div class="section-headline">
+            <span class="title-accent-bar"></span>
+            <span>PROJECTS MANAGEMENT OS</span>
+          </div>
+
+          <div class="filter-pills-row" id="project-filter-group">
+            <button class="filter-btn active" data-filter="ALL">ALL</button>
+            <button class="filter-btn" data-filter="Active">ACTIVE</button>
+            <button class="filter-btn" data-filter="AK Enterprise">AK ENTERPRISE</button>
+            <button class="filter-btn" data-filter="Experimental">EXPERIMENTAL</button>
+            <button class="filter-btn" data-filter="Completed">COMPLETED</button>
+          </div>
+        </div>
+
+        <div class="projects-grid-layout" id="projects-render-grid">
+          <!-- Dynamically Rendered -->
+        </div>
+      </section>
+
+      <!-- SECTION: SPLIT FORGE & TIMELINE -->
+      <div class="split-col-layout">
+        
+        <!-- IDEAS FORGE -->
+        <section id="section-ideas" class="cyber-card">
+          <div class="section-head-bar" style="margin-bottom: 18px;">
+            <div class="section-headline" style="font-size: 20px;">
+              <span class="title-accent-bar" style="height: 18px;"></span>
+              <span>IDEAS FORGE</span>
+            </div>
+            <button class="btn-action-sm" id="btn-forge-quick-idea">+ NEW CONCEPT</button>
+          </div>
+
+          <div id="ideas-render-container">
+            <!-- Dynamically Rendered -->
+          </div>
+        </section>
+
+        <!-- MISSION TIMELINE & EVENTS -->
+        <section id="section-timeline" class="cyber-card">
+          <div class="section-head-bar" style="margin-bottom: 18px;">
+            <div class="section-headline" style="font-size: 20px;">
+              <span class="title-accent-bar" style="height: 18px;"></span>
+              <span>MISSION TIMELINE</span>
+            </div>
+            <span class="tag-chip" id="clock-synced-indicator">ORBITAL TIME</span>
+          </div>
+
+          <div id="timeline-render-container">
+            <!-- Dynamically Rendered -->
+          </div>
+        </section>
+      </div>
+
+      <!-- SECTION: AK AI LAB & LIVE STREAMING TERMINAL -->
+      <section id="section-ai-lab" class="cyber-card" style="margin-bottom: 60px;">
+        <div class="section-head-bar">
+          <div class="section-headline">
+            <span class="title-accent-bar"></span>
+            <span>AK AI LAB // NEURAL RUNTIME</span>
+          </div>
+          <span class="tag-chip" style="color: #00ffaa; border-color: rgba(0,255,170,0.3);">MODEL: AK-CORE-4-TURBO</span>
+        </div>
+
+        <div class="ai-lab-terminal" id="terminal-stream-log">
+          <div>[00:00:01] AK CORE v8.4.2 BOOT COMPLETE.</div>
+          <div>[00:00:02] INITIALIZING TENSOR CORE PIPELINES (10,480 FLOPS ALLOCATED)...</div>
+          <div>[00:00:03] EMBEDDINGS GRAPH SYNCED WITH 14 ACTIVE PROJECTS.</div>
+          <div>[00:00:04] QUANTUM-RESISTANT PROTOCOL READY. LISTENING ON PORT 443...</div>
+          <div>[00:00:05] SYSTEM AWAITING ARCHITECT DISPATCH.<span class="terminal-cursor"></span></div>
+        </div>
+      </section>
+
+      <!-- SECTION: FOCUS MODE & SOUND PROTOCOL -->
+      <section class="cyber-card" style="margin-bottom: 60px;">
+        <div class="focus-hud-box">
+          <span class="tag-chip">&#9679; DEEP FOCUS PROTOCOL</span>
+          <div class="timer-digits-clock" id="pomodoro-clock-val">25:00</div>
+
+          <div class="timer-buttons-row">
+            <button class="filter-btn" data-timer-mins="25">25 MIN</button>
+            <button class="filter-btn" data-timer-mins="50">50 MIN</button>
+            <button class="filter-btn" data-timer-mins="90">90 MIN</button>
+            <button class="btn-glow-pill" id="btn-toggle-pomo-timer">START SESSION</button>
+            <button class="filter-btn" id="btn-toggle-binaural">&#9835; NEURAL HUM</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: SYSTEM METRICS & VELOCITY -->
+      <section id="section-analytics" style="margin-bottom: 60px;">
+        <div class="section-head-bar">
+          <div class="section-headline">
+            <span class="title-accent-bar"></span>
+            <span>SYSTEM VELOCITY & TELEMETRY</span>
+          </div>
+        </div>
+
+        <div class="metrics-stats-grid">
+          <div class="cyber-card metric-hud-card">
+            <div class="metric-number-bold" id="stat-count-projects">16</div>
+            <div class="field-caption">Total Projects</div>
+          </div>
+          <div class="cyber-card metric-hud-card">
+            <div class="metric-number-bold" id="stat-count-ideas">42</div>
+            <div class="field-caption">Ideas Forged</div>
+          </div>
+          <div class="cyber-card metric-hud-card">
+            <div class="metric-number-bold" id="stat-count-focus">182h</div>
+            <div class="field-caption">Deep Work Logged</div>
+          </div>
+          <div class="cyber-card metric-hud-card">
+            <div class="metric-number-bold" id="stat-count-conversion">48%</div>
+            <div class="field-caption">Idea-to-Build Ratio</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: KNOWLEDGE VAULT -->
+      <section id="section-vault" class="cyber-card" style="margin-bottom: 60px;">
+        <div class="section-head-bar">
+          <div class="section-headline">
+            <span class="title-accent-bar"></span>
+            <span>KNOWLEDGE VAULT & RESEARCH ARCHIVES</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;" id="vault-render-grid">
+          <!-- Dynamically Rendered -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- SITE FOOTER -->
+    <footer class="master-footer">
+      <div class="footer-content-wrap">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
+          <div style="display: flex; align-items: center; gap: 20px;">
+            <img class="nav-master-logo" src="logo.png" alt="AK INDUSTRIES" />
+            <span style="font-size: 13px; color: var(--text-muted);">My digital world. My ideas. My future.</span>
+          </div>
+
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-primary); display: flex; align-items: center; gap: 8px;">
+            <span class="status-dot-core dot-building"></span>
+            <span>AK CORE OS // VER 8.4.2 [ONLINE]</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--text-dim); border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 24px;">
+          <div>&copy; <span id="copyright-year">2026</span> AK INDUSTRIES. ALL SYSTEMS SECURED.</div>
+          <div style="display: flex; gap: 18px; font-family: var(--font-mono); font-size: 11px;">
+            <a href="#" class="theme-link" data-theme-id="ak-flagship">AK FLAGSHIP</a>
+            <a href="#" class="theme-link" data-theme-id="night-core">NIGHT CORE</a>
+            <a href="#" class="theme-link" data-theme-id="violet-ai">VIOLET AI</a>
+            <a href="#" class="theme-link" data-theme-id="cyber-cyan">CYBER CYAN</a>
+            <a href="#" class="theme-link" data-theme-id="minimal-silver">MINIMAL SILVER</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="mobile-dock-nav">
+      <div class="mobile-dock-btn active" data-nav="command">
+        <span>&#9632;</span>
+        <span>HOME</span>
+      </div>
+      <div class="mobile-dock-btn" data-nav="projects">
+        <span>&#9670;</span>
+        <span>PROJECTS</span>
+      </div>
+      <div class="mobile-dock-btn" data-nav="ideas">
+        <span>&#9733;</span>
+        <span>IDEAS</span>
+      </div>
+      <div class="mobile-dock-btn" data-nav="ak">
+        <span>&#9650;</span>
+        <span>AK CORP</span>
+      </div>
+      <div class="mobile-dock-btn" data-nav="lab">
+        <span>&#9889;</span>
+        <span>AI LAB</span>
+      </div>
+    </nav>
+
+    <!-- FLOATING QUICK CAPTURE BUTTON -->
+    <button class="floating-action-fab" id="btn-fab-capture">
+      <span>+</span>
+      <span>CAPTURE</span>
+    </button>
+  </div>
+
+  <!-- ==========================================================================
+       03. MODAL DIALOGS
+       ========================================================================== -->
+
+  <!-- MODAL: COMMAND PALETTE (CTRL + K) -->
+  <div class="modal-overlay-bg" id="modal-omni-palette">
+    <div class="modal-frame">
+      <input type="text" class="input-text" id="omni-search-input" placeholder="Search commands, projects, ideas, systems..." style="border: none; border-bottom: 1px solid var(--border-subtle); border-radius: 0; padding: 18px 24px; font-size: 17px;" autofocus />
+      <div style="max-height: 380px; overflow-y: auto; padding: 12px;" id="omni-results-box">
+        <!-- Results injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AK CORE AI ADVISOR -->
+  <div class="modal-overlay-bg" id="modal-ai-advisor">
+    <div class="modal-frame">
+      <div class="modal-top-bar">
+        <div class="modal-headline">
+          <span style="color: var(--accent-primary);">&#9670;</span>
+          <span>AK CORE // NEURAL ADVISOR</span>
+        </div>
+        <div class="modal-close-trigger" data-close-modal>&times;</div>
+      </div>
+      <div class="modal-scroll-body">
+        <div style="display: flex; flex-direction: column; gap: 14px; max-height: 380px; overflow-y: auto; margin-bottom: 16px;" id="ai-chat-thread">
+          <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); padding: 14px 18px; border-radius: 14px; font-size: 13.5px; line-height: 1.5; color: var(--text-main);">
+            Greetings, Alexander. AK CORE is online and synchronized with your active projects, ideas forge, and timeline. What would you like to prioritize or build today?
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+          <input type="text" class="input-text" id="ai-input-query" placeholder="Ask what to focus on, summarize milestones, or draft an idea..." />
+          <button class="btn-glow-pill" id="btn-query-ai">DISPATCH</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PROJECT INSPECTOR & LIVE EDITOR -->
+  <div class="modal-overlay-bg" id="modal-project-inspector">
+    <div class="modal-frame" style="max-width: 720px;">
+      <div class="modal-top-bar">
+        <div class="modal-headline" id="inspector-modal-heading">PROJECT INSPECTION</div>
+        <div class="modal-close-trigger" data-close-modal>&times;</div>
+      </div>
+      <div class="modal-scroll-body" id="inspector-modal-body">
+        <!-- Live project data injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: QUICK CAPTURE -->
+  <div class="modal-overlay-bg" id="modal-quick-capture">
+    <div class="modal-frame">
+      <div class="modal-top-bar">
+        <div class="modal-headline">QUICK CAPTURE // OPERATING SYSTEM</div>
+        <div class="modal-close-trigger" data-close-modal>&times;</div>
+      </div>
+      <div class="modal-scroll-body">
+        <div class="field-wrap">
+          <label class="field-caption">Capture Type</label>
+          <select class="select-dropdown" id="form-capture-type">
+            <option value="project">New Project</option>
+            <option value="idea">New Idea</option>
+            <option value="event">Timeline Event</option>
+            <option value="note">Vault Note</option>
+          </select>
+        </div>
+        <div class="field-wrap">
+          <label class="field-caption">Title / Designation</label>
+          <input type="text" class="input-text" id="form-capture-title" placeholder="e.g. Autonomous Vector Clustering Mesh" />
+        </div>
+        <div class="field-wrap">
+          <label class="field-caption">Description & Technical Objectives</label>
+          <textarea class="textarea-text" id="form-capture-desc" placeholder="Scope, architecture notes, key goals..."></textarea>
+        </div>
+        <div class="field-wrap">
+          <label class="field-caption">Category / Tags (comma separated)</label>
+          <input type="text" class="input-text" id="form-capture-tags" placeholder="AI, Rust, Edge, Spatial" />
+        </div>
+        <button class="btn-glow-pill" style="width: 100%; justify-content: center; padding: 13px;" id="btn-commit-capture">
+          COMMIT TO SYSTEM DATABASE
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DEVELOPER MODE EASTER EGG -->
+  <div class="modal-overlay-bg" id="modal-dev-mode">
+    <div class="modal-frame">
+      <div class="modal-top-bar">
+        <div class="modal-headline" style="color: #00ffaa; font-family: var(--font-mono);">
+          AK CORE // ROOT ACCESS [DEVELOPER MODE]
+        </div>
+        <div class="modal-close-trigger" data-close-modal>&times;</div>
+      </div>
+      <div class="modal-scroll-body" style="font-family: var(--font-mono); font-size: 12px; color: #94a3b8;">
+        <p style="color: #fff; margin-bottom: 12px;">SYSTEM DIAGNOSTICS & TELEMETRY:</p>
+        <div style="background: rgba(0,0,0,0.6); padding: 16px; border-radius: 10px; border: 1px solid rgba(0,255,170,0.2); margin-bottom: 16px; line-height: 1.7;">
+          <div>WebGL Hardware Render: ACTIVE</div>
+          <div>Audio Matrix: Web Audio API Realtime Synthesizer</div>
+          <div>Data Persistence Layer: LocalStorage + SQL-Ready Schema</div>
+          <div>Memory Heap Allocation: 16.4 MB (Nominal)</div>
+        </div>
+        <button class="btn-action-sm" id="btn-export-json" style="padding: 8px 16px; margin-right: 10px;">EXPORT JSON BACKUP</button>
+        <button class="btn-action-sm" id="btn-reset-factory" style="padding: 8px 16px; border-color: #ff3366; color: #ff3366;">RESET DEMO DATA</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       04. JAVASCRIPT: LOGO MASKS, SOUND ENGINE, PERSISTENCE & INTERACTIONS
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       01. DATA ARCHITECTURE & STORAGE ENGINE
+       ========================================================================== */
+    const STORAGE_KEY = 'AK_INDUSTRIES_COMMAND_CENTER_STATE_MASTER_V2';
+
+    const INITIAL_STATE = {
+      user: {
+        name: "ALEXANDER K.",
+        roles: "Founder / AI Architect / Technologist / Systems Builder",
+        status: "🟢 CURRENTLY BUILDING",
+        motto: "Build. Explore. Learn. Create. Transform. Engineering autonomous intelligence architectures and high-velocity digital systems."
+      },
+      projects: [
+        {
+          id: "proj-1",
+          name: "Neural Matrix OS v4.2",
+          category: "AK Enterprise",
+          desc: "Autonomous AI orchestration kernel with unified memory graph, continuous real-time learning, and edge vector clustering.",
+          progress: 74,
+          stage: "Dev",
+          priority: "CRITICAL",
+          tags: ["AI/ML", "Rust", "Distributed", "WASM"],
+          tasks: [
+            { title: "Implement zero-copy memory bridge", done: true },
+            { title: "Benchmark SIMD vector operations", done: true },
+            { title: "Distributed consensus validation", done: false }
+          ],
+          milestones: "Q3 2026 Core Release",
+          nextAction: "Execute 10k token parallel throughput test"
+        },
+        {
+          id: "proj-2",
+          name: "Hyperion Edge Node",
+          category: "Active",
+          desc: "Ultra-low power autonomous edge computer capable of local 70B parameter LLM inference with hardware acceleration.",
+          progress: 90,
+          stage: "Testing",
+          priority: "HIGH",
+          tags: ["Hardware", "Embedded", "Edge AI", "C++"],
+          tasks: [
+            { title: "Thermal stress validation at 45W", done: true },
+            { title: "FP8 quantization pipeline", done: true }
+          ],
+          milestones: "Production Batch Alpha",
+          nextAction: "Assemble rev 2.1 prototype PCB"
+        },
+        {
+          id: "proj-3",
+          name: "Cognitive Synthetics Engine",
+          category: "Experimental",
+          desc: "Self-evolving synthetic data generation engine for fine-tuning multi-modal reasoning models.",
+          progress: 45,
+          stage: "Design",
+          priority: "MEDIUM",
+          tags: ["Synthetic Data", "Deep Learning", "Python"],
+          tasks: [
+            { title: "Define heuristic feedback loops", done: true },
+            { title: "Domain-specific adversarial filters", done: false }
+          ],
+          milestones: "Whitepaper & Open Weights",
+          nextAction: "Draft evaluation rubric"
+        },
+        {
+          id: "proj-4",
+          name: "Vortex Spatial Web Framework",
+          category: "Completed",
+          desc: "High-performance WebGPU rendering pipeline for complex 3D holographic dashboards and neural visualizations.",
+          progress: 100,
+          stage: "Launch",
+          priority: "HIGH",
+          tags: ["WebGPU", "TypeScript", "Graphics"],
+          tasks: [
+            { title: "Cross-browser WebGPU fallback", done: true },
+            { title: "Spatial audio spatializer integration", done: true }
+          ],
+          milestones: "Shipped v1.0.0",
+          nextAction: "Maintain enterprise LTS build"
+        }
+      ],
+      ideas: [
+        {
+          id: "idea-1",
+          title: "Bio-Adaptive Ambient Displays",
+          category: "Hardware / UI",
+          priority: "HIGH",
+          desc: "Monochrome e-ink dynamic architectural panels that adjust based on developer cognitive load."
+        },
+        {
+          id: "idea-2",
+          title: "Self-Balancing Micro-Datacenter Grid",
+          category: "Energy / AI",
+          priority: "HIGH",
+          desc: "Solar-coupled edge compute cluster that dynamically routes LLM compute to regions with excess renewable power."
+        },
+        {
+          id: "idea-3",
+          title: "Voice-To-Executable Logic Compilers",
+          category: "Developer Tools",
+          priority: "MEDIUM",
+          desc: "Zero-latency real-time voice stream translation directly into verified Rust AST expressions."
+        }
+      ],
+      timeline: [
+        { id: "time-1", date: "AUG 2026", title: "AK Core OS Global Deployment", type: "LAUNCH" },
+        { id: "time-2", date: "OCT 2026", title: "Keynote: Neural Autonomy Summit", type: "CONFERENCE" },
+        { id: "time-3", date: "DEC 2026", title: "Quantum-Resistant Edge Security Audit", type: "MILESTONE" }
+      ],
+      vault: [
+        { id: "v-1", title: "Sub-Millisecond LLM Streaming Protocols", tag: "AI/SYSTEMS", snippet: "Using WebSocket multiplexing with binary Protobuf frames to achieve <12ms TTFT..." },
+        { id: "v-2", title: "Zero-Copy WASM Memory Layouts", tag: "RUST", snippet: "Linear memory alignment patterns to bypass JS serialization overhead..." },
+        { id: "v-3", title: "Dynamic Spatial Graph Traversal", tag: "ALGORITHMS", snippet: "A* variant optimized for 3D hierarchical state machines..." }
+      ]
+    };
+
+    let AppState = (function() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      return JSON.parse(JSON.stringify(INITIAL_STATE));
+    })();
+
+    function persistState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState));
+      renderDashboard();
+    }
+
+    /* ==========================================================================
+       02. SOUND EFFECTS & BINAURAL HUM SYNTHESIZER (WEB AUDIO API)
+       ========================================================================== */
+    class SynthEngine {
+      constructor() {
+        this.ctx = null;
+        this.humGain = null;
+        this.isHumActive = false;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      blip(freq = 800, type = 'sine', duration = 0.08, gainVal = 0.04) {
+        try {
+          this.init();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(freq * 0.5, this.ctx.currentTime + duration);
+          gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {}
+      }
+      sweepLaser() {
+        [440, 554, 659, 880].forEach((f, i) => {
+          setTimeout(() => this.blip(f, 'sawtooth', 0.22, 0.03), i * 60);
+        });
+      }
+      toggleNeuralHum() {
+        this.init();
+        if (this.isHumActive) {
+          if (this.humGain) {
+            this.humGain.gain.exponentialRampToValueAtTime(0.00001, this.ctx.currentTime + 1);
+            setTimeout(() => {
+              this.oscA?.stop();
+              this.isHumActive = false;
+            }, 1000);
+          }
+        } else {
+          this.oscA = this.ctx.createOscillator();
+          const oscB = this.ctx.createOscillator();
+          this.humGain = this.ctx.createGain();
+          
+          this.oscA.type = 'sine';
+          this.oscA.frequency.setValueAtTime(55, this.ctx.currentTime); // 55Hz Low A
+          oscB.type = 'triangle';
+          oscB.frequency.setValueAtTime(110, this.ctx.currentTime);
+
+          this.humGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+          this.humGain.gain.exponentialRampToValueAtTime(0.04, this.ctx.currentTime + 2);
+
+          this.oscA.connect(this.humGain);
+          oscB.connect(this.humGain);
+          this.humGain.connect(this.ctx.destination);
+
+          this.oscA.start();
+          oscB.start();
+          this.isHumActive = true;
+        }
+        return this.isHumActive;
+      }
+    }
+    const Synth = new SynthEngine();
+
+    /* ==========================================================================
+       03. CINEMATIC 7-STAGE LOGO INTRO (USING EXACT ORIGINAL IMAGE ASSET)
+       ========================================================================== */
+    function runMasterLogoIntro() {
+      const overlay = document.getElementById('intro-overlay');
+      const logoImg = document.getElementById('master-logo-asset');
+      const laser = document.getElementById('laser-scan-bar');
+      const shine = document.getElementById('logo-shine-effect');
+      const hudText = document.getElementById('intro-hud-text');
+      const appShell = document.getElementById('app-shell');
+
+      let completed = false;
+
+      function exitBoot() {
+        if (completed) return;
+        completed = true;
+        Synth.sweepLaser();
+        overlay.classList.add('dismissed');
+        appShell.style.opacity = '1';
+        setTimeout(() => overlay.remove(), 1300);
+      }
+
+      document.getElementById('btn-skip-boot').addEventListener('click', exitBoot);
+
+      // Scene 1: (0.0-0.5s) Total Darkness & Singularity
+      logoImg.style.clipPath = 'polygon(0 0, 0 0, 0 0, 0 0)';
+      logoImg.style.opacity = '0';
+      laser.style.opacity = '0';
+      hudText.innerText = 'SCENE 1 // BLACKNESS & QUANTUM SINGULARITY';
+      Synth.blip(280, 'sine', 0.1, 0.05);
+
+      // Scene 2: (0.5-1.2s) Reveal ONLY 'A' Portion of Original Logo
+      setTimeout(() => {
+        if (completed) return;
+        hudText.innerText = "SCENE 2 // VECTOR TRACE: 'A' GEOMETRY";
+        logoImg.style.opacity = '1';
+        // Clip to the exact left A region of the master image
+        logoImg.style.clipPath = 'polygon(0% 0%, 28% 0%, 28% 100%, 0% 100%)';
+        laser.style.opacity = '1';
+        laser.style.left = '28%';
+        Synth.blip(520, 'sawtooth', 0.15, 0.04);
+      }, 600);
+
+      // Scene 3: (1.2-1.9s) Reveal 'K' Portion of Original Logo
+      setTimeout(() => {
+        if (completed) return;
+        hudText.innerText = "SCENE 3 // VECTOR TRACE: 'K' SYNDICATE";
+        // Clip to encompass the complete AK monogram
+        logoImg.style.clipPath = 'polygon(0% 0%, 42% 0%, 42% 100%, 0% 100%)';
+        laser.style.left = '42%';
+        Synth.blip(680, 'sawtooth', 0.15, 0.04);
+      }, 1300);
+
+      // Scene 4: (1.9-2.4s) AK Monogram Precision Fusion & Energy Pulse
+      setTimeout(() => {
+        if (completed) return;
+        hudText.innerText = "SCENE 4 // AK MONOGRAM FUSED";
+        laser.style.opacity = '0';
+        Synth.blip(880, 'sine', 0.25, 0.07);
+      }, 2000);
+
+      // Scene 5: (2.4-3.3s) Reveal 'INDUSTRIES' Typography Left to Right
+      setTimeout(() => {
+        if (completed) return;
+        hudText.innerText = "SCENE 5 // INDUSTRIAL MATRIX WORDMARK";
+        logoImg.style.clipPath = 'polygon(0% 0%, 95% 0%, 95% 82%, 0% 82%)';
+        laser.style.opacity = '1';
+        laser.style.left = '95%';
+        Synth.blip(620, 'triangle', 0.2, 0.06);
+      }, 2500);
+
+      // Scene 6: (3.3-4.0s) Reveal Underline & Terminal Arrowhead
+      setTimeout(() => {
+        if (completed) return;
+        hudText.innerText = "SCENE 6 // SPEED VECTOR BEAM LOCK";
+        // Reveal 100% of the entire original master logo
+        logoImg.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+        laser.style.left = '100%';
+        Synth.blip(1040, 'sine', 0.25, 0.08);
+      }, 3300);
+
+      // Scene 7: (4.0-5.0s) Light Sweep & Hyper-Expansion Fly-Through
+      setTimeout(() => {
+        if (completed) return;
+        hudText.innerText = "SCENE 7 // ENTERING COMMAND CENTER OS";
+        laser.style.opacity = '0';
+        shine.style.opacity = '1';
+        shine.style.transform = 'translateX(100%)';
+        setTimeout(exitBoot, 900);
+      }, 4100);
+    }
+
+    /* ==========================================================================
+       04. BACKGROUND AMBIENT PARTICLES & GRID
+       ========================================================================== */
+    function initAmbientCanvas() {
+      const canvas = document.getElementById('ambient-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h;
+      let particles = [];
+      let mouseX = -1000, mouseY = -1000;
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      const count = window.innerWidth < 768 ? 35 : 70;
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          size: Math.random() * 1.8 + 0.5,
+          alpha: Math.random() * 0.6 + 0.2
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, w, h);
+
+        for (let i = 0; i < particles.length; i++) {
+          const p1 = particles[i];
+          p1.x += p1.vx;
+          p1.y += p1.vy;
+
+          if (p1.x < 0) p1.x = w;
+          if (p1.x > w) p1.x = 0;
+          if (p1.y < 0) p1.y = h;
+          if (p1.y > h) p1.y = 0;
+
+          const dx = mouseX - p1.x;
+          const dy = mouseY - p1.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 140) {
+            p1.x -= (dx / dist) * 0.6;
+            p1.y -= (dy / dist) * 0.6;
+          }
+
+          ctx.fillStyle = `rgba(0, 180, 255, ${p1.alpha})`;
+          ctx.beginPath();
+          ctx.arc(p1.x, p1.y, p1.size, 0, Math.PI * 2);
+          ctx.fill();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const d = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+            if (d < 110) {
+              ctx.strokeStyle = `rgba(0, 180, 255, ${0.12 * (1 - d / 110)})`;
+              ctx.lineWidth = 0.6;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(render);
+      }
+      render();
+    }
+
+    /* ==========================================================================
+       05. SYSTEM NEXUS RELATIONAL CANVAS (INTERACTIVE GRAPH)
+       ========================================================================== */
+    function initNexusGraph() {
+      const canvas = document.getElementById('nexus-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let w, h;
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        w = canvas.width = rect.width;
+        h = canvas.height = rect.height;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      const nodes = [
+        { id: 'me', label: 'IDENTITY', color: '#00d2ff', x: 0.15, y: 0.5, radius: 18 },
+        { id: 'ideas', label: 'IDEAS FORGE', color: '#ff007a', x: 0.35, y: 0.3, radius: 14 },
+        { id: 'projects', label: 'PROJECTS OS', color: '#7000ff', x: 0.55, y: 0.7, radius: 16 },
+        { id: 'ak', label: 'AK INDUSTRIES', color: '#ffffff', x: 0.75, y: 0.4, radius: 22 },
+        { id: 'future', label: 'FUTURE HORIZON', color: '#00ffaa', x: 0.90, y: 0.5, radius: 15 }
+      ];
+
+      const edges = [
+        { from: 'me', to: 'ideas' },
+        { from: 'ideas', to: 'projects' },
+        { from: 'projects', to: 'ak' },
+        { from: 'ak', to: 'future' },
+        { from: 'me', to: 'projects' }
+      ];
+
+      let pulse = 0;
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        pulse += 0.02;
+
+        edges.forEach(e => {
+          const n1 = nodes.find(n => n.id === e.from);
+          const n2 = nodes.find(n => n.id === e.to);
+          const x1 = n1.x * w, y1 = n1.y * h;
+          const x2 = n2.x * w, y2 = n2.y * h;
+
+          const grad = ctx.createLinearGradient(x1, y1, x2, y2);
+          grad.addColorStop(0, n1.color);
+          grad.addColorStop(1, n2.color);
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+
+          const offset = (Math.sin(pulse + x1) + 1) / 2;
+          const px = x1 + (x2 - x1) * offset;
+          const py = y1 + (y2 - y1) * offset;
+          ctx.fillStyle = '#fff';
+          ctx.beginPath();
+          ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        nodes.forEach(n => {
+          const nx = n.x * w;
+          const ny = n.y * h;
+
+          ctx.fillStyle = n.color;
+          ctx.shadowColor = n.color;
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.arc(nx, ny, n.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          ctx.fillStyle = '#030508';
+          ctx.beginPath();
+          ctx.arc(nx, ny, n.radius * 0.45, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = '600 11px JetBrains Mono';
+          ctx.textAlign = 'center';
+          ctx.fillText(n.label, nx, ny + n.radius + 18);
+        });
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    /* ==========================================================================
+       06. DASHBOARD RENDERING & PERSISTENT DATA
+       ========================================================================== */
+    function renderDashboard() {
+      // Dynamic Greeting based on real system hour
+      const hour = new Date().getHours();
+      const greetingEl = document.getElementById('dynamic-time-greeting');
+      if (hour >= 4 && hour < 12) greetingEl.innerText = "GOOD MORNING, ARCHITECT";
+      else if (hour >= 12 && hour < 17) greetingEl.innerText = "GOOD AFTERNOON, ARCHITECT";
+      else if (hour >= 17 && hour < 22) greetingEl.innerText = "GOOD EVENING, ARCHITECT";
+      else greetingEl.innerText = "STILL BUILDING? DEEP NIGHT PROTOCOL";
+
+      // Identity Setup
+      document.getElementById('display-user-name').innerText = AppState.user.name;
+      document.getElementById('display-user-roles').innerText = AppState.user.roles;
+      document.getElementById('display-user-motto').innerText = `"${AppState.user.motto}"`;
+      document.getElementById('status-text-display').innerText = AppState.user.status;
+
+      // Status indicator dot
+      const dot = document.getElementById('status-dot-indicator');
+      dot.className = 'status-dot-core ' + (
+        AppState.user.status.includes('BUILDING') ? 'dot-building' :
+        AppState.user.status.includes('DEEP WORK') ? 'dot-deepwork' :
+        AppState.user.status.includes('EXPLORING') ? 'dot-exploring' : 'dot-planning'
+      );
+
+      // Render Projects
+      const projectsGrid = document.getElementById('projects-render-grid');
+      projectsGrid.innerHTML = '';
+      AppState.projects.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'cyber-card project-node-card';
+        card.innerHTML = `
+          <div>
+            <div class="project-header-meta">
+              <span class="tag-chip" style="color: ${p.priority === 'CRITICAL' ? '#ff3366' : 'var(--accent-primary)'};">
+                ${p.category} // ${p.priority}
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">${p.stage}</span>
+            </div>
+            <div class="project-title-text">${p.name}</div>
+            <p class="project-desc-body">${p.desc}</p>
+            <div class="project-chips-wrap">
+              ${p.tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
+            </div>
+          </div>
+          <div>
+            <div class="progress-bar-slot">
+              <div class="progress-bar-glow" style="width: ${p.progress}%;"></div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
+              <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">Progress: ${p.progress}%</span>
+              <span class="btn-action-sm">INSPECT &rarr;</span>
+            </div>
+          </div>
+        `;
+        card.addEventListener('click', () => openProjectModal(p.id));
+        projectsGrid.appendChild(card);
+      });
+
+      // Render Ideas Forge
+      const ideasContainer = document.getElementById('ideas-render-container');
+      ideasContainer.innerHTML = '';
+      AppState.ideas.forEach(idea => {
+        const div = document.createElement('div');
+        div.className = 'item-entry-card';
+        div.innerHTML = `
+          <div class="item-top-row">
+            <span style="font-weight: 600; font-size: 15px; color: #fff;">${idea.title}</span>
+            <button class="btn-action-sm" onclick="convertIdeaToProject('${idea.id}')">+ CONVERT TO BUILD</button>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 8px;">${idea.desc}</p>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="tag-chip" style="font-size: 9px;">${idea.category}</span>
+            <span style="font-family: var(--font-mono); font-size: 10px; color: var(--text-dim);">Priority: ${idea.priority}</span>
+          </div>
+        `;
+        ideasContainer.appendChild(div);
+      });
+
+      // Render Timeline
+      const timelineContainer = document.getElementById('timeline-render-container');
+      timelineContainer.innerHTML = '';
+      AppState.timeline.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item-entry-card';
+        div.innerHTML = `
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent-primary);">${item.date}</span>
+            <span class="tag-chip" style="font-size: 9px;">${item.type}</span>
+          </div>
+          <div style="font-size: 13.5px; font-weight: 600; color: #fff;">${item.title}</div>
+        `;
+        timelineContainer.appendChild(div);
+      });
+
+      // Render Vault
+      const vaultContainer = document.getElementById('vault-render-grid');
+      vaultContainer.innerHTML = '';
+      AppState.vault.forEach(v => {
+        const div = document.createElement('div');
+        div.className = 'cyber-card';
+        div.style.padding = '20px';
+        div.innerHTML = `
+          <span class="tag-chip" style="margin-bottom: 8px;">${v.tag}</span>
+          <div style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;">${v.title}</div>
+          <div style="font-family: var(--font-mono); font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">${v.snippet}</div>
+        `;
+        vaultContainer.appendChild(div);
+      });
+
+      // Update Metrics
+      document.getElementById('stat-count-projects').innerText = AppState.projects.length;
+      document.getElementById('stat-count-ideas').innerText = AppState.ideas.length;
+      document.getElementById('copyright-year').innerText = new Date().getFullYear();
+    }
+
+    /* Convert Idea into Active Project */
+    window.convertIdeaToProject = function(ideaId) {
+      const idea = AppState.ideas.find(i => i.id === ideaId);
+      if (!idea) return;
+
+      AppState.projects.unshift({
+        id: 'proj-' + Date.now(),
+        name: idea.title,
+        category: 'Active',
+        desc: idea.desc,
+        progress: 10,
+        stage: 'Plan',
+        priority: idea.priority,
+        tags: [idea.category, 'New'],
+        tasks: [{ title: 'Initial architecture blueprint', done: false }],
+        milestones: 'Concept Sprint',
+        nextAction: 'Draft technical specification'
+      });
+
+      AppState.ideas = AppState.ideas.filter(i => i.id !== ideaId);
+      persistState();
+      Synth.sweepLaser();
+    };
+
+    /* Project Inspector Modal */
+    function openProjectModal(projId) {
+      const p = AppState.projects.find(x => x.id === projId);
+      if (!p) return;
+
+      document.getElementById('inspector-modal-heading').innerText = `${p.name} // METRICS & TASKS`;
+      const body = document.getElementById('inspector-modal-body');
+      body.innerHTML = `
+        <div style="margin-bottom: 18px;">
+          <label class="field-caption">Objective Description</label>
+          <p style="color: #fff; font-size: 14px; line-height: 1.5;">${p.desc}</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px;">
+          <div>
+            <label class="field-caption">Current Stage</label>
+            <select class="select-dropdown" id="edit-stage-val">
+              <option ${p.stage === 'Idea' ? 'selected' : ''}>Idea</option>
+              <option ${p.stage === 'Plan' ? 'selected' : ''}>Plan</option>
+              <option ${p.stage === 'Design' ? 'selected' : ''}>Design</option>
+              <option ${p.stage === 'Dev' ? 'selected' : ''}>Dev</option>
+              <option ${p.stage === 'Testing' ? 'selected' : ''}>Testing</option>
+              <option ${p.stage === 'Launch' ? 'selected' : ''}>Launch</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-caption">Progress Percentage (${p.progress}%)</label>
+            <input type="range" min="0" max="100" value="${p.progress}" class="input-text" id="edit-progress-val" />
+          </div>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label class="field-caption">Deliverables & Tasks</label>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            ${p.tasks.map((t, idx) => `
+              <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-main); cursor: pointer;">
+                <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTaskStatus('${p.id}', ${idx})" />
+                <span style="${t.done ? 'text-decoration: line-through; color: var(--text-dim);' : ''}">${t.title}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label class="field-caption">Next Scheduled Action</label>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--accent-primary);">${p.nextAction}</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+          <button class="btn-action-sm" style="border-color: #ff3366; color: #ff3366;" onclick="deleteProject('${p.id}')">ARCHIVE / DELETE</button>
+          <button class="btn-glow-pill" onclick="saveProjectEdits('${p.id}')">SAVE UPDATES</button>
+        </div>
+      `;
+
+      document.getElementById('modal-project-inspector').classList.add('active');
+      Synth.blip(600, 'sine', 0.08);
+    }
+
+    window.toggleTaskStatus = function(projId, taskIdx) {
+      const p = AppState.projects.find(x => x.id === projId);
+      if (p && p.tasks[taskIdx]) {
+        p.tasks[taskIdx].done = !p.tasks[taskIdx].done;
+        persistState();
+      }
+    };
+
+    window.saveProjectEdits = function(projId) {
+      const p = AppState.projects.find(x => x.id === projId);
+      if (p) {
+        p.stage = document.getElementById('edit-stage-val').value;
+        p.progress = parseInt(document.getElementById('edit-progress-val').value, 10);
+        persistState();
+        document.getElementById('modal-project-inspector').classList.remove('active');
+        Synth.blip(900, 'sine', 0.1);
+      }
+    };
+
+    window.deleteProject = function(projId) {
+      AppState.projects = AppState.projects.filter(p => p.id !== projId);
+      persistState();
+      document.getElementById('modal-project-inspector').classList.remove('active');
+    };
+
+    /* ==========================================================================
+       07. COMMAND PALETTE & OMNI SEARCH (CTRL + K)
+       ========================================================================== */
+    function initCommandPalette() {
+      const modal = document.getElementById('modal-omni-palette');
+      const input = document.getElementById('omni-search-input');
+      const results = document.getElementById('omni-results-box');
+
+      function open() {
+        modal.classList.add('active');
+        input.value = '';
+        renderList('');
+        input.focus();
+        Synth.blip(700, 'sine', 0.08);
+      }
+
+      function close() {
+        modal.classList.remove('active');
+      }
+
+      document.getElementById('btn-open-palette').addEventListener('click', open);
+
+      window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          modal.classList.contains('active') ? close() : open();
+        }
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.modal-overlay-bg').forEach(m => m.classList.remove('active'));
+        }
+      });
+
+      input.addEventListener('input', (e) => renderList(e.target.value.toLowerCase()));
+
+      function renderList(q) {
+        const commands = [
+          { label: 'New Project Capture', type: 'ACTION', action: () => openCaptureModal('project') },
+          { label: 'New Idea Capture', type: 'ACTION', action: () => openCaptureModal('idea') },
+          { label: 'Open AK CORE AI Assistant', type: 'SYSTEM', action: () => document.getElementById('modal-ai-advisor').classList.add('active') },
+          { label: 'Theme: AK Flagship', type: 'THEME', action: () => switchTheme('ak-flagship') },
+          { label: 'Theme: Night Core', type: 'THEME', action: () => switchTheme('night-core') },
+          { label: 'Theme: Violet AI', type: 'THEME', action: () => switchTheme('violet-ai') },
+          { label: 'Theme: Cyber Cyan', type: 'THEME', action: () => switchTheme('cyber-cyan') },
+          { label: 'Theme: Minimal Silver', type: 'THEME', action: () => switchTheme('minimal-silver') }
+        ];
+
+        AppState.projects.forEach(p => {
+          commands.push({ label: `Project: ${p.name}`, type: 'PROJECT', action: () => openProjectModal(p.id) });
+        });
+
+        const filtered = commands.filter(c => c.label.toLowerCase().includes(q));
+
+        results.innerHTML = '';
+        filtered.slice(0, 8).forEach(c => {
+          const div = document.createElement('div');
+          div.style.padding = '12px 16px';
+          div.style.borderRadius = '10px';
+          div.style.display = 'flex';
+          div.style.alignItems = 'center';
+          div.style.justifyContent = 'space-between';
+          div.style.cursor = 'pointer';
+          div.innerHTML = `
+            <div style="display:flex; align-items:center; gap:12px; font-size:14px; font-weight:500; color:#fff;">
+              <span class="tag-chip" style="font-size:9px;">${c.type}</span>
+              <span>${c.label}</span>
+            </div>
+            <span style="font-family: var(--font-mono); font-size:11px; color: var(--text-dim);">&crarr;</span>
+          `;
+          div.addEventListener('click', () => {
+            close();
+            c.action();
+          });
+          results.appendChild(div);
+        });
+      }
+    }
+
+    /* ==========================================================================
+       08. AK CORE AI PERSONAL ASSISTANT
+       ========================================================================== */
+    function initAICore() {
+      const modal = document.getElementById('modal-ai-advisor');
+      const input = document.getElementById('ai-input-query');
+      const thread = document.getElementById('ai-chat-thread');
+
+      document.getElementById('btn-open-assistant').addEventListener('click', () => {
+        modal.classList.add('active');
+        input.focus();
+        Synth.blip(750, 'sine', 0.1);
+      });
+
+      document.getElementById('btn-query-ai').addEventListener('click', sendQuery);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') sendQuery();
+      });
+
+      function sendQuery() {
+        const q = input.value.trim();
+        if (!q) return;
+
+        const uBubble = document.createElement('div');
+        uBubble.style.alignSelf = 'flex-end';
+        uBubble.style.background = 'var(--accent-gradient)';
+        uBubble.style.color = '#fff';
+        uBubble.style.padding = '12px 16px';
+        uBubble.style.borderRadius = '14px';
+        uBubble.style.borderBottomRightRadius = '4px';
+        uBubble.style.fontSize = '13.5px';
+        uBubble.style.maxWidth = '85%';
+        uBubble.innerText = q;
+        thread.appendChild(uBubble);
+        input.value = '';
+        Synth.blip(650, 'sine', 0.05);
+
+        setTimeout(() => {
+          const aBubble = document.createElement('div');
+          aBubble.style.alignSelf = 'flex-start';
+          aBubble.style.background = 'rgba(255, 255, 255, 0.05)';
+          aBubble.style.border = '1px solid var(--border-subtle)';
+          aBubble.style.color = 'var(--text-main)';
+          aBubble.style.padding = '12px 16px';
+          aBubble.style.borderRadius = '14px';
+          aBubble.style.borderBottomLeftRadius = '4px';
+          aBubble.style.fontSize = '13.5px';
+          aBubble.style.maxWidth = '85%';
+          aBubble.style.lineHeight = '1.5';
+
+          let reply = "";
+          const lower = q.toLowerCase();
+
+          if (lower.includes('work') || lower.includes('focus') || lower.includes('today')) {
+            const active = AppState.projects.find(p => p.progress < 100);
+            reply = `Based on live telemetry, your primary sprint focus is "${active.name}" (${active.progress}% in ${active.stage} stage). Next action item: "${active.nextAction}".`;
+          } else if (lower.includes('idea') || lower.includes('brainstorm')) {
+            reply = `You have ${AppState.ideas.length} ideas in the forge. High priority target: "${AppState.ideas[0]?.title}". Ready to draft technical architecture?`;
+          } else {
+            reply = `AK CORE parsed: "${q}". Synchronizing state across projects and infrastructure. System telemetry running at nominal optimal velocity.`;
+          }
+
+          aBubble.innerText = reply;
+          thread.appendChild(aBubble);
+          thread.scrollTop = thread.scrollHeight;
+          Synth.blip(950, 'sine', 0.08);
+        }, 450);
+      }
+    }
+
+    /* ==========================================================================
+       09. QUICK CAPTURE ENGINE
+       ========================================================================== */
+    function openCaptureModal(defaultType = 'project') {
+      document.getElementById('form-capture-type').value = defaultType;
+      document.getElementById('form-capture-title').value = '';
+      document.getElementById('form-capture-desc').value = '';
+      document.getElementById('form-capture-tags').value = '';
+      document.getElementById('modal-quick-capture').classList.add('active');
+      document.getElementById('form-capture-title').focus();
+      Synth.blip(550, 'sine', 0.08);
+    }
+
+    function initQuickCapture() {
+      document.getElementById('btn-fab-capture').addEventListener('click', () => openCaptureModal('project'));
+      document.getElementById('btn-forge-quick-idea').addEventListener('click', () => openCaptureModal('idea'));
+
+      document.getElementById('btn-commit-capture').addEventListener('click', () => {
+        const type = document.getElementById('form-capture-type').value;
+        const title = document.getElementById('form-capture-title').value.trim();
+        const desc = document.getElementById('form-capture-desc').value.trim();
+        const tags = document.getElementById('form-capture-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+
+        if (!title) return alert('Title is required for system commit.');
+
+        if (type === 'project') {
+          AppState.projects.unshift({
+            id: 'proj-' + Date.now(),
+            name: title,
+            category: 'Active',
+            desc: desc || 'Newly initiated command center project.',
+            progress: 0,
+            stage: 'Plan',
+            priority: 'HIGH',
+            tags: tags.length ? tags : ['General', 'Alpha'],
+            tasks: [{ title: 'Sprint planning', done: false }],
+            milestones: 'Initial Phase',
+            nextAction: 'Draft specification'
+          });
+        } else if (type === 'idea') {
+          AppState.ideas.unshift({
+            id: 'idea-' + Date.now(),
+            title: title,
+            category: tags[0] || 'General Concept',
+            priority: 'HIGH',
+            desc: desc || 'Concept captured from quick capture interface.'
+          });
+        } else if (type === 'event') {
+          AppState.timeline.push({
+            id: 'time-' + Date.now(),
+            date: 'UPCOMING',
+            title: title,
+            type: 'EVENT'
+          });
+        } else if (type === 'note') {
+          AppState.vault.unshift({
+            id: 'v-' + Date.now(),
+            title: title,
+            tag: tags[0] || 'RESEARCH',
+            snippet: desc || 'Notes and architectural observations.'
+          });
+        }
+
+        persistState();
+        document.getElementById('modal-quick-capture').classList.remove('active');
+        Synth.sweepLaser();
+      });
+    }
+
+    /* ==========================================================================
+       10. POMODORO FOCUS TIMER
+       ========================================================================== */
+    function initFocusTimer() {
+      let duration = 25 * 60;
+      let remaining = duration;
+      let interval = null;
+      let running = false;
+
+      const clock = document.getElementById('pomodoro-clock-val');
+      const toggle = document.getElementById('btn-toggle-pomo-timer');
+
+      function update() {
+        const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+        const s = (remaining % 60).toString().padStart(2, '0');
+        clock.innerText = `${m}:${s}`;
+      }
+
+      document.querySelectorAll('[data-timer-mins]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const mins = parseInt(e.target.dataset.timerMins, 10);
+          duration = mins * 60;
+          remaining = duration;
+          clearInterval(interval);
+          running = false;
+          toggle.innerText = 'START SESSION';
+          update();
+          Synth.blip(500, 'sine', 0.05);
+        });
+      });
+
+      toggle.addEventListener('click', () => {
+        if (running) {
+          clearInterval(interval);
+          running = false;
+          toggle.innerText = 'RESUME FOCUS';
+        } else {
+          running = true;
+          toggle.innerText = 'PAUSE FOCUS';
+          Synth.blip(880, 'triangle', 0.1);
+          interval = setInterval(() => {
+            if (remaining > 0) {
+              remaining--;
+              update();
+            } else {
+              clearInterval(interval);
+              running = false;
+              toggle.innerText = 'SESSION COMPLETE';
+              Synth.sweepLaser();
+              alert('DEEP WORK SESSION CONCLUDED. Telemetry logged.');
+            }
+          }, 1000);
+        }
+      });
+
+      document.getElementById('btn-toggle-binaural').addEventListener('click', (e) => {
+        const active = Synth.toggleNeuralHum();
+        e.target.style.color = active ? 'var(--accent-primary)' : 'var(--text-muted)';
+        e.target.style.borderColor = active ? 'var(--accent-primary)' : 'var(--border-subtle)';
+      });
+    }
+
+    /* ==========================================================================
+       11. THEME SWITCHER & 5-CLICK EASTER EGG
+       ========================================================================== */
+    function switchTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      Synth.blip(800, 'sine', 0.06);
+    }
+
+    function initThemeAndDevMode() {
+      document.querySelectorAll('.theme-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTheme(e.target.dataset.themeId);
+        });
+      });
+
+      // 5-Click Secret Developer Easter Egg on AK Logo
+      let clicks = 0;
+      let timer = null;
+      document.getElementById('logo-easter-trigger').addEventListener('click', () => {
+        clicks++;
+        Synth.blip(300 + clicks * 150, 'sawtooth', 0.08);
+        clearTimeout(timer);
+        timer = setTimeout(() => { clicks = 0; }, 2000);
+
+        if (clicks >= 5) {
+          clicks = 0;
+          document.getElementById('modal-dev-mode').classList.add('active');
+          Synth.sweepLaser();
+        }
+      });
+
+      // Export JSON State
+      document.getElementById('btn-export-json').addEventListener('click', () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState, null, 2));
+        const a = document.createElement('a');
+        a.setAttribute("href", dataStr);
+        a.setAttribute("download", `AK_CORE_BACKUP_${Date.now()}.json`);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+
+      // Factory Reset Demo Data
+      document.getElementById('btn-reset-factory').addEventListener('click', () => {
+        if (confirm('Revert all systems to default initial factory state?')) {
+          localStorage.removeItem(STORAGE_KEY);
+          AppState = JSON.parse(JSON.stringify(INITIAL_STATE));
+          persistState();
+          location.reload();
+        }
+      });
+
+      // Status Pill Toggle
+      document.getElementById('status-pill-toggle').addEventListener('click', () => {
+        const list = [
+          "🟢 CURRENTLY BUILDING",
+          "🔵 IN DEEP WORK",
+          "🟣 EXPLORING NEW IDEAS",
+          "🟠 PLANNING ARCHITECTURE"
+        ];
+        const idx = list.indexOf(AppState.user.status);
+        AppState.user.status = list[(idx + 1) % list.length];
+        persistState();
+        Synth.blip(720, 'sine', 0.08);
+      });
+
+      // Edit Name
+      document.getElementById('display-user-name').addEventListener('click', () => {
+        const val = prompt('Enter your callsign / name:', AppState.user.name);
+        if (val) {
+          AppState.user.name = val.toUpperCase();
+          persistState();
+        }
+      });
+
+      // Close Modals
+      document.querySelectorAll('.modal-overlay-bg').forEach(bg => {
+        bg.addEventListener('click', (e) => {
+          if (e.target === bg) bg.classList.remove('active');
+        });
+      });
+      document.querySelectorAll('[data-close-modal]').forEach(b => {
+        b.addEventListener('click', () => {
+          document.querySelectorAll('.modal-overlay-bg').forEach(bg => bg.classList.remove('active'));
+        });
+      });
+    }
+
+    /* ==========================================================================
+       12. INTERACTIVE CURSOR CONTROLLER
+       ========================================================================== */
+    function initCustomCursor() {
+      const dot = document.getElementById('cursor-dot');
+      const ring = document.getElementById('cursor-ring');
+
+      window.addEventListener('mousemove', (e) => {
+        dot.style.left = `${e.clientX}px`;
+        dot.style.top = `${e.clientY}px`;
+        ring.style.left = `${e.clientX}px`;
+        ring.style.top = `${e.clientY}px`;
+      });
+
+      document.querySelectorAll('button, a, .cyber-card, input, select, textarea').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+      });
+    }
+
+    /* ==========================================================================
+       13. INITIALIZATION BOOTSTRAP
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      runMasterLogoIntro();
+      initAmbientCanvas();
+      initNexusGraph();
+      renderDashboard();
+      initCommandPalette();
+      initAICore();
+      initQuickCapture();
+      initFocusTimer();
+      initThemeAndDevMode();
+      initCustomCursor();
+    });
+  </script>
+</body>
+</html>
